@@ -77,6 +77,35 @@
   transform: rotateY(180deg);
 }
 
+.card-front.golden {
+  background: linear-gradient(135deg, #fff9c4, #fffacd, #fff8dc);
+  border-color: #ffd700;
+  box-shadow: 
+    0 8px 25px rgba(255, 215, 0, 0.4),
+    0 0 30px rgba(255, 215, 0, 0.2),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  animation: cardGoldenGlow 2s ease-in-out infinite alternate;
+}
+
+.card-content.golden {
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes cardGoldenGlow {
+  0% {
+    box-shadow: 
+      0 8px 25px rgba(255, 215, 0, 0.4),
+      0 0 30px rgba(255, 215, 0, 0.2),
+      inset 0 0 20px rgba(255, 215, 0, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 10px 35px rgba(255, 215, 0, 0.6),
+      0 0 50px rgba(255, 215, 0, 0.4),
+      inset 0 0 30px rgba(255, 215, 0, 0.2);
+  }
+}
+
 .card-back {
   background: linear-gradient(135deg, #1e3c72, #2a5298);
   transform: rotateY(0deg);

@@ -2,6 +2,7 @@ export interface Card {
   suit: 'hearts' | 'diamonds' | 'clubs' | 'spades';
   value: string;
   color: 'red' | 'black';
+  isGolden?: boolean;
 }
 
 export interface GameState {
@@ -9,8 +10,10 @@ export interface GameState {
   bet: number;
   currentCard: Card | null;
   isFlipping: boolean;
-  gameResult: 'win' | 'lose' | null;
+  gameResult: 'win' | 'lose' | 'golden-win' | null;
   showResult: boolean;
+  consecutiveWins: number;
+  isGoldenRound: boolean;
 }
 
 export type BetChoice = 'red' | 'black';

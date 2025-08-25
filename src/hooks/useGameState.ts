@@ -12,6 +12,8 @@ export const useGameState = () => {
     isFlipping: false,
     gameResult: null,
     showResult: false,
+    consecutiveWins: 0,
+    isGoldenRound: false,
   });
 
   const setBet = useCallback((amount: number) => {
@@ -32,7 +34,11 @@ export const useGameState = () => {
     (choice: BetChoice) => {
       if (gameState.chips < gameState.bet || gameState.isFlipping) return;
 
+      const isGoldenRound = gameState.consecutiveWins >= 2;
       const newCard = generateRandomCard();
+      if (isGoldenRound) {
+        newCard.isGolden = true;
+      }
 
       setGameState((prev) => ({
         ...prev,
@@ -40,29 +46,28 @@ export const useGameState = () => {
         currentCard: newCard,
         gameResult: null,
         showResult: false,
+        isGoldenRound,
       }));
 
       setTimeout(() => {
         const won = newCard.color === choice;
+        const reward = won && isGoldenRound ? gameState.bet * 2 : gameState.bet;
+        const newConsecutiveWins = won ? gameState.consecutiveWins + 1 : 0;
+        
         setGameState((prev) => ({
           ...prev,
           isFlipping: false,
-          gameResult: won ? "win" : "lose",
+          gameResult: won ? (isGoldenRound ? "golden-win" : "win") : "lose",
           showResult: true,
-          chips: won ? prev.chips + prev.bet : prev.chips - prev.bet,
+          chips: won ? prev.chips + reward : prev.chips - prev.bet,
+          consecutiveWins: newConsecutiveWins,
+          isGoldenRound: false,
         }));
 
-        setTimeout(() => {
-          setGameState((prev) => ({
-            ...prev,
-            showResult: false,
-            gameResult: null,
-            currentCard: null,
-          }));
-        }, 2000);
+        // Removed automatic timeout - now handled by close button or auto-dismiss
       }, 1500);
     },
-    [gameState.chips, gameState.bet, gameState.isFlipping]
+    [gameState.chips, gameState.bet, gameState.isFlipping, gameState.consecutiveWins]
   );
 
   const resetGame = useCallback(() => {
@@ -75,11 +80,21 @@ export const useGameState = () => {
     }));
   }, []);
 
+  const closeResult = useCallback(() => {
+    setGameState((prev) => ({
+      ...prev,
+      showResult: false,
+      gameResult: null,
+      currentCard: null,
+    }));
+  }, []);
+
   return {
     gameState,
     setBet,
     addChips,
     playGame,
     resetGame,
+    closeResult,
   };
 };

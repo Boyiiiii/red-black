@@ -4,11 +4,13 @@ import Card from "./components/Card";
 import BettingPanel from "./components/BettingPanel";
 import Shop from "./components/Shop";
 import ResultAnimation from "./components/ResultAnimation";
+import RulesModal from "./components/RulesModal";
 import "./App.css";
 
 function App() {
-  const { gameState, setBet, addChips, playGame } = useGameState();
+  const { gameState, setBet, addChips, playGame, closeResult } = useGameState();
   const [showShop, setShowShop] = useState(false);
+  const [showRules, setShowRules] = useState(false);
 
   const handleBuyChips = (amount: number) => {
     addChips(amount);
@@ -27,6 +29,12 @@ function App() {
         </button>
       </div>
 
+      <div className="rules-section">
+        <button className="rules-button" onClick={() => setShowRules(true)}>
+          Rules
+        </button>
+      </div>
+
       <div className="game-content">
         <div className="card-area">
           <div className="card-display">
@@ -37,17 +45,19 @@ function App() {
               <div
                 className={`deck-card top-card ${
                   gameState.isFlipping ? "pulling" : ""
-                }`}
+                } ${gameState.consecutiveWins >= 2 ? "golden" : ""}`}
               ></div>
             </div>
-            {(gameState.currentCard || gameState.isFlipping) && (
-              <Card
-                card={gameState.currentCard}
-                isFlipping={gameState.isFlipping}
-                showBack={gameState.isFlipping}
-                isPullingOut={gameState.isFlipping}
-              />
-            )}
+            <div className="card-flip-area">
+              {(gameState.currentCard || gameState.isFlipping) && (
+                <Card
+                  card={gameState.currentCard}
+                  isFlipping={gameState.isFlipping}
+                  showBack={gameState.isFlipping}
+                  isPullingOut={gameState.isFlipping}
+                />
+              )}
+            </div>
           </div>
         </div>
 
@@ -57,6 +67,7 @@ function App() {
           onBetChange={setBet}
           onPlayGame={playGame}
           isGameInProgress={gameState.isFlipping}
+          showResult={gameState.showResult}
         />
       </div>
 
@@ -79,6 +90,12 @@ function App() {
         result={gameState.gameResult!}
         show={gameState.showResult}
         betAmount={gameState.bet}
+        onClose={closeResult}
+      />
+
+      <RulesModal
+        isOpen={showRules}
+        onClose={() => setShowRules(false)}
       />
 
       <div className="game-footer">

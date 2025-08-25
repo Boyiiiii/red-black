@@ -23,9 +23,9 @@ const Card: React.FC<CardProps> = ({
       }`}
     >
       <div className="card">
-        <div className="card-front">
+        <div className={`card-front ${card?.isGolden ? 'golden' : ''}`}>
           {card ? (
-            <div className={`card-content ${card.color}`}>
+            <div className={`card-content ${card.color} ${card.isGolden ? 'golden' : ''}`}>
               <div className="card-corner top-left">
                 <span className="value">{card.value}</span>
                 <span className="suit">{getSuitSymbol(card.suit)}</span>

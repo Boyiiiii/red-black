@@ -76,6 +76,34 @@
   background: linear-gradient(135deg, #ffed4e, #ffd700);
 }
 
+.rules-section {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.rules-button {
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.rules-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  transform: translateY(-1px);
+}
+
 .game-content {
   flex: 1;
   display: flex;
@@ -95,10 +123,19 @@
 
 .card-display {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   min-height: 200px;
   gap: 60px;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.card-flip-area {
+  width: 120px;
+  height: 168px;
+  flex-shrink: 0;
   position: relative;
 }
 
@@ -164,6 +201,37 @@
 
 .deck-card.top-card.pulling {
   animation: cardPulled 1.5s ease-in-out;
+}
+
+.deck-card.top-card.golden {
+  background: linear-gradient(135deg, #ffd700, #ffed4e, #ffc107);
+  border: 3px solid #ffb300;
+  box-shadow: 
+    0 4px 15px rgba(255, 215, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: goldenGlow 2s ease-in-out infinite alternate;
+}
+
+.deck-card.top-card.golden::before {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes goldenGlow {
+  0% {
+    box-shadow: 
+      0 4px 15px rgba(255, 215, 0, 0.5),
+      0 0 30px rgba(255, 215, 0, 0.3),
+      inset 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow: 
+      0 6px 25px rgba(255, 215, 0, 0.8),
+      0 0 50px rgba(255, 215, 0, 0.6),
+      inset 0 0 30px rgba(255, 255, 255, 0.4);
+  }
 }
 
 @keyframes cardPulled {

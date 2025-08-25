@@ -8,6 +8,7 @@ interface BettingPanelProps {
   onBetChange: (amount: number) => void;
   onPlayGame: (choice: BetChoice) => void;
   isGameInProgress: boolean;
+  showResult: boolean;
 }
 
 const BettingPanel: React.FC<BettingPanelProps> = ({
@@ -16,6 +17,7 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
   onBetChange,
   onPlayGame,
   isGameInProgress,
+  showResult,
 }) => {
   const betAmounts = [5, 10, 25, 50, 100];
 
@@ -34,7 +36,7 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
               key={amount}
               className={`bet-button ${bet === amount ? "selected" : ""}`}
               onClick={() => onBetChange(amount)}
-              disabled={amount > chips || isGameInProgress}
+              disabled={amount > chips || isGameInProgress || showResult}
             >
               ${amount}
             </button>
@@ -48,7 +50,7 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
           <button
             className="color-button red"
             onClick={() => onPlayGame("red")}
-            disabled={chips < bet || isGameInProgress}
+            disabled={chips < bet || isGameInProgress || showResult}
           >
             <div className="color-indicator red-indicator"></div>
             RED
@@ -56,7 +58,7 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
           <button
             className="color-button black"
             onClick={() => onPlayGame("black")}
-            disabled={chips < bet || isGameInProgress}
+            disabled={chips < bet || isGameInProgress || showResult}
           >
             <div className="color-indicator black-indicator"></div>
             BLACK
