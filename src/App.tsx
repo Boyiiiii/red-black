@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useGameState } from './hooks/useGameState';
-import Card from './components/Card';
-import BettingPanel from './components/BettingPanel';
-import Shop from './components/Shop';
-import ResultAnimation from './components/ResultAnimation';
-import './App.css';
+import { useState } from "react";
+import { useGameState } from "./hooks/useGameState";
+import Card from "./components/Card";
+import BettingPanel from "./components/BettingPanel";
+import Shop from "./components/Shop";
+import ResultAnimation from "./components/ResultAnimation";
+import "./App.css";
 
 function App() {
-  const { gameState, setBet, addChips, playGame, resetGame } = useGameState();
+  const { gameState, setBet, addChips, playGame } = useGameState();
   const [showShop, setShowShop] = useState(false);
 
   const handleBuyChips = (amount: number) => {
@@ -22,10 +22,7 @@ function App() {
           RED & BLACK
           <span className="title-icon">🎰</span>
         </div>
-        <button 
-          className="shop-button"
-          onClick={() => setShowShop(true)}
-        >
+        <button className="shop-button" onClick={() => setShowShop(true)}>
           🏪 SHOP
         </button>
       </div>
@@ -37,11 +34,15 @@ function App() {
               <div className="deck-card"></div>
               <div className="deck-card"></div>
               <div className="deck-card"></div>
-              <div className={`deck-card top-card ${gameState.isFlipping ? 'pulling' : ''}`}></div>
+              <div
+                className={`deck-card top-card ${
+                  gameState.isFlipping ? "pulling" : ""
+                }`}
+              ></div>
             </div>
             {(gameState.currentCard || gameState.isFlipping) && (
-              <Card 
-                card={gameState.currentCard} 
+              <Card
+                card={gameState.currentCard}
                 isFlipping={gameState.isFlipping}
                 showBack={gameState.isFlipping}
                 isPullingOut={gameState.isFlipping}
@@ -63,9 +64,7 @@ function App() {
         <div className="game-over">
           <h2>Game Over!</h2>
           <p>You're out of chips! Visit the shop to buy more.</p>
-          <button onClick={() => setShowShop(true)}>
-            Go to Shop
-          </button>
+          <button onClick={() => setShowShop(true)}>Go to Shop</button>
         </div>
       )}
 

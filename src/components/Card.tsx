@@ -4,15 +4,24 @@ import { getSuitSymbol } from "../utils/cardUtils";
 import "./Card.css";
 
 interface CardProps {
-  card?: CardType;
+  card?: CardType | null;
   isFlipping: boolean;
   showBack?: boolean;
   isPullingOut?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ card, isFlipping, showBack = true, isPullingOut = false }) => {
+const Card: React.FC<CardProps> = ({
+  card,
+  isFlipping,
+  showBack = true,
+  isPullingOut = false,
+}) => {
   return (
-    <div className={`card-container ${isFlipping ? "flipping" : ""} ${isPullingOut ? "pulling-out" : ""}`}>
+    <div
+      className={`card-container ${isFlipping ? "flipping" : ""} ${
+        isPullingOut ? "pulling-out" : ""
+      }`}
+    >
       <div className="card">
         <div className="card-front">
           {card ? (
