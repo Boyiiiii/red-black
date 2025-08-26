@@ -11,9 +11,16 @@ function App() {
   const { gameState, setBet, addChips, playGame, closeResult } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
+  const [showChipAnimation, setShowChipAnimation] = useState(false);
+  const [purchasedAmount, setPurchasedAmount] = useState(0);
 
   const handleBuyChips = (amount: number) => {
     addChips(amount);
+    setPurchasedAmount(amount);
+    setShowChipAnimation(true);
+    setTimeout(() => {
+      setShowChipAnimation(false);
+    }, 2000);
   };
 
   return (
@@ -68,6 +75,8 @@ function App() {
           onPlayGame={playGame}
           isGameInProgress={gameState.isFlipping}
           showResult={gameState.showResult}
+          showChipAnimation={showChipAnimation}
+          purchasedAmount={purchasedAmount}
         />
       </div>
 

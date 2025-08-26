@@ -9,6 +9,8 @@ interface BettingPanelProps {
   onPlayGame: (choice: BetChoice) => void;
   isGameInProgress: boolean;
   showResult: boolean;
+  showChipAnimation?: boolean;
+  purchasedAmount?: number;
 }
 
 const BettingPanel: React.FC<BettingPanelProps> = ({
@@ -18,6 +20,8 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
   onPlayGame,
   isGameInProgress,
   showResult,
+  showChipAnimation = false,
+  purchasedAmount = 0,
 }) => {
   const betAmounts = [5, 10, 25, 50];
 
@@ -26,6 +30,11 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
       <div className="chips-display">
         <div className="chips-icon">🪙</div>
         <span className="chips-amount">{chips}</span>
+        {showChipAnimation && (
+          <div className="chip-animation">
+            +{purchasedAmount}
+          </div>
+        )}
       </div>
 
       <div className="bet-selection">
