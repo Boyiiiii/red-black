@@ -69,6 +69,35 @@
   }
 }
 
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fullscreen-button {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
 .shop-button {
   padding: 12px 24px;
   background: linear-gradient(135deg, #ffd700, #ffed4e);
@@ -350,6 +379,18 @@
     font-size: 14px;
   }
 
+  .header-buttons {
+    gap: 4px;
+  }
+  
+  .fullscreen-button {
+    padding: 4px;
+    font-size: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+  }
+  
   .shop-button {
     padding: 6px 12px;
     font-size: 12px;
@@ -471,6 +512,18 @@
     font-size: 12px;
   }
 
+  .header-buttons {
+    gap: 3px;
+  }
+  
+  .fullscreen-button {
+    padding: 3px;
+    font-size: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
+  
   .shop-button {
     padding: 4px 8px;
     font-size: 10px;

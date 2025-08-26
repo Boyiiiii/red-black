@@ -11,9 +11,22 @@ function App() {
   const { gameState, setBet, addChips, playGame, closeResult } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleBuyChips = (amount: number) => {
     addChips(amount);
+  };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
   };
 
   return (
@@ -24,9 +37,14 @@ function App() {
           RED & BLACK
           <span className="title-icon">🎰</span>
         </div>
-        <button className="shop-button" onClick={() => setShowShop(true)}>
-          🏪 SHOP
-        </button>
+        <div className="header-buttons">
+          <button className="fullscreen-button" onClick={toggleFullscreen}>
+            {isFullscreen ? "⛶" : "⛶"}
+          </button>
+          <button className="shop-button" onClick={() => setShowShop(true)}>
+            🏪 SHOP
+          </button>
+        </div>
       </div>
 
       <div className="rules-section">
