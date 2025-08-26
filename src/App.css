@@ -9,16 +9,27 @@
 }
 
 .app::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 71, 87, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(46, 213, 115, 0.05) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 215, 0, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 71, 87, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(46, 213, 115, 0.05) 0%,
+      transparent 50%
+    );
   pointer-events: none;
   z-index: -1;
 }
@@ -49,7 +60,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -133,16 +145,16 @@
 }
 
 .card-flip-area {
-  width: 120px;
-  height: 168px;
+  width: 160px;
+  height: 224px;
   flex-shrink: 0;
   position: relative;
 }
 
 .card-deck {
   position: relative;
-  width: 120px;
-  height: 168px;
+  width: 160px;
+  height: 224px;
   z-index: 1;
   transition: transform 0.3s ease;
 }
@@ -153,8 +165,8 @@
 
 .deck-card {
   position: absolute;
-  width: 120px;
-  height: 168px;
+  width: 160px;
+  height: 224px;
   background: linear-gradient(135deg, #1e3c72, #2a5298);
   border-radius: 12px;
   border: 2px solid #ddd;
@@ -179,24 +191,31 @@
 .deck-card.top-card {
   transform: translateY(0px) rotate(0deg);
   z-index: 4;
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.2) 2px, transparent 2px);
+  background-image: radial-gradient(
+      circle at 25% 25%,
+      rgba(255, 255, 255, 0.2) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(255, 255, 255, 0.2) 2px,
+      transparent 2px
+    );
   background-size: 20px 20px;
   position: relative;
 }
 
 .deck-card.top-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
 }
 
 .deck-card.top-card.pulling {
@@ -206,9 +225,7 @@
 .deck-card.top-card.golden {
   background: linear-gradient(135deg, #ffd700, #ffed4e, #ffc107);
   border: 3px solid #ffb300;
-  box-shadow: 
-    0 4px 15px rgba(255, 215, 0, 0.5),
-    0 0 30px rgba(255, 215, 0, 0.3),
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5), 0 0 30px rgba(255, 215, 0, 0.3),
     inset 0 0 20px rgba(255, 255, 255, 0.2);
   animation: goldenGlow 2s ease-in-out infinite alternate;
 }
@@ -221,16 +238,12 @@
 
 @keyframes goldenGlow {
   0% {
-    box-shadow: 
-      0 4px 15px rgba(255, 215, 0, 0.5),
-      0 0 30px rgba(255, 215, 0, 0.3),
-      inset 0 0 20px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5),
+      0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.2);
   }
   100% {
-    box-shadow: 
-      0 6px 25px rgba(255, 215, 0, 0.8),
-      0 0 50px rgba(255, 215, 0, 0.6),
-      inset 0 0 30px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.8),
+      0 0 50px rgba(255, 215, 0, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.4);
   }
 }
 
@@ -252,7 +265,6 @@
     transform: translateY(0px) rotate(0deg);
   }
 }
-
 
 .game-over {
   position: fixed;
@@ -318,7 +330,7 @@
     height: 100vh;
     overflow: hidden;
   }
-  
+
   .game-header {
     padding: 8px 16px;
     flex-direction: row;
@@ -327,73 +339,76 @@
     gap: 8px;
     min-height: auto;
   }
-  
+
   .game-title {
     font-size: 18px;
     letter-spacing: 1px;
     gap: 8px;
   }
-  
+
   .title-icon {
     font-size: 14px;
   }
-  
+
   .shop-button {
     padding: 6px 12px;
     font-size: 12px;
     border-radius: 15px;
   }
-  
+
   .rules-section {
     padding: 4px 0;
   }
-  
+
   .rules-button {
     padding: 4px 12px;
     font-size: 10px;
   }
-  
+
   .game-content {
     flex: 1;
     flex-direction: column;
-    gap: 20px;
-    padding: 8px 16px;
-    justify-content: center;
+    gap: 16px;
     align-items: center;
     min-height: 0;
   }
-  
+
   .card-area {
-    gap: 10px;
+    gap: 12px;
     flex-shrink: 0;
+    flex: 0.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  
+
   .card-display {
-    min-height: 140px;
-    gap: 20px;
-    max-width: 400px;
+    min-height: 196px;
+    gap: 25px;
+    max-width: 500px;
   }
-  
+
   .card-deck {
-    width: 100px;
-    height: 140px;
+    width: 140px;
+    height: 196px;
   }
-  
+
   .deck-card {
-    width: 100px;
-    height: 140px;
+    width: 140px;
+    height: 196px;
   }
-  
+
   .card-flip-area {
-    width: 100px;
-    height: 140px;
+    width: 140px;
+    height: 196px;
   }
-  
+
   .game-footer {
     padding: 8px;
     font-size: 12px;
   }
-  
+
   .game-footer p {
     font-size: 12px;
     margin: 0;
@@ -405,17 +420,17 @@
     max-width: 280px;
     width: 90%;
   }
-  
+
   .game-over h2 {
     font-size: 24px;
     margin: 0 0 12px 0;
   }
-  
+
   .game-over p {
     font-size: 14px;
     margin: 0 0 16px 0;
   }
-  
+
   .game-over button {
     padding: 12px 24px;
     font-size: 14px;
@@ -436,39 +451,39 @@
     right: 0;
     bottom: 0;
   }
-  
+
   .game-header {
     padding: 3px 12px;
     min-height: auto;
     flex-shrink: 0;
   }
-  
+
   .game-title {
     font-size: 16px;
     letter-spacing: 0.5px;
     gap: 6px;
   }
-  
+
   .title-icon {
     font-size: 12px;
   }
-  
+
   .shop-button {
     padding: 4px 8px;
     font-size: 10px;
     border-radius: 12px;
   }
-  
+
   .rules-section {
     padding: 2px 0;
     flex-shrink: 0;
   }
-  
+
   .rules-button {
     padding: 2px 8px;
     font-size: 9px;
   }
-  
+
   .game-content {
     flex: 1;
     flex-direction: row;
@@ -478,38 +493,38 @@
     align-items: center;
     min-height: 0;
   }
-  
+
   .card-area {
     gap: 6px;
     flex-shrink: 0;
   }
-  
+
   .card-display {
-    min-height: 90px;
-    gap: 12px;
-    max-width: 240px;
+    min-height: 140px;
+    gap: 15px;
+    max-width: 320px;
   }
-  
+
   .card-deck {
-    width: 70px;
-    height: 98px;
+    width: 100px;
+    height: 140px;
   }
-  
+
   .deck-card {
-    width: 70px;
-    height: 98px;
+    width: 100px;
+    height: 140px;
   }
-  
+
   .card-flip-area {
-    width: 70px;
-    height: 98px;
+    width: 100px;
+    height: 140px;
   }
-  
+
   .game-footer {
     padding: 2px;
     flex-shrink: 0;
   }
-  
+
   .game-footer p {
     font-size: 9px;
     margin: 0;
