@@ -5,27 +5,34 @@
   z-index: 10;
 }
 
-.card-container.pulling-out {
-  animation: pullFromDeck 0.8s ease-out;
-  transform-origin: left center;
-}
 
 .card-container.disappearing {
-  animation: cardDisappear 0.6s ease-in forwards;
+  animation: cardZoomOut 0.6s ease-in forwards;
 }
 
-@keyframes cardDisappear {
+.card-container {
+  animation: cardZoomIn 0.5s ease-out;
+}
+
+@keyframes cardZoomOut {
   0% {
     opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.8) translateY(-10px);
+    transform: scale(1);
   }
   100% {
     opacity: 0;
-    transform: scale(0.6) translateY(-20px);
+    transform: scale(0.3);
+  }
+}
+
+@keyframes cardZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -53,30 +60,23 @@
 }
 
 .card-container.flipping .card {
-  animation: pullAndFlip 1.5s ease-in-out forwards;
+  animation: flipInPlace 1.2s ease-in-out forwards;
   transition: none;
 }
 
 .card-container:not(.flipping) .card {
-  transform: rotateY(180deg);
+  transform: rotateY(0deg);
 }
 
-@keyframes pullAndFlip {
+@keyframes flipInPlace {
   0% {
-    transform: translateX(-80px) translateY(-10px) scale(0.9) rotateY(0deg);
-    opacity: 0.8;
+    transform: rotateY(0deg) scale(1);
   }
-  40% {
-    transform: translateX(-10px) translateY(-2px) scale(0.98) rotateY(0deg);
-    opacity: 1;
-  }
-  60% {
-    transform: translateX(0) translateY(0) scale(1) rotateY(90deg);
-    opacity: 1;
+  50% {
+    transform: rotateY(90deg) scale(1.1);
   }
   100% {
-    transform: translateX(0) translateY(0) scale(1) rotateY(180deg);
-    opacity: 1;
+    transform: rotateY(180deg) scale(1);
   }
 }
 
@@ -126,7 +126,8 @@
 }
 
 .card-back {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background: linear-gradient(135deg, #8B5A96, #C06C84);
+  border: 3px solid #D4A5D8;
   transform: rotateY(0deg);
 }
 
@@ -185,11 +186,15 @@
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.2) 2px, transparent 2px);
-  background-size: 20px 20px;
+    linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.3) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.3) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.3) 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
   border-radius: 10px;
   position: relative;
+  padding: 8px;
 }
 
 .card-back-pattern::before {
@@ -198,11 +203,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.3);
+  width: 80px;
+  height: 100px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 8px;
 }
 
 @media (max-width: 768px) {
@@ -228,19 +233,19 @@
   
   @keyframes pullAndFlip {
     0% {
-      transform: translateX(-98px) translateY(-14px) scale(0.9) rotateY(0deg);
-      opacity: 0.8;
+      transform: scale(0.8) rotateY(0deg);
+      opacity: 0.5;
     }
-    40% {
-      transform: translateX(-14px) translateY(-2px) scale(0.98) rotateY(0deg);
+    30% {
+      transform: scale(1.05) rotateY(0deg);
       opacity: 1;
     }
     60% {
-      transform: translateX(0) translateY(0) scale(1) rotateY(90deg);
+      transform: scale(1) rotateY(90deg);
       opacity: 1;
     }
     100% {
-      transform: translateX(0) translateY(0) scale(1) rotateY(180deg);
+      transform: scale(1) rotateY(180deg);
       opacity: 1;
     }
   }
@@ -291,19 +296,19 @@
   
   @keyframes pullAndFlip {
     0% {
-      transform: translateX(-70px) translateY(-10px) scale(0.9) rotateY(0deg);
-      opacity: 0.8;
+      transform: scale(0.8) rotateY(0deg);
+      opacity: 0.5;
     }
-    40% {
-      transform: translateX(-10px) translateY(-1px) scale(0.98) rotateY(0deg);
+    30% {
+      transform: scale(1.05) rotateY(0deg);
       opacity: 1;
     }
     60% {
-      transform: translateX(0) translateY(0) scale(1) rotateY(90deg);
+      transform: scale(1) rotateY(90deg);
       opacity: 1;
     }
     100% {
-      transform: translateX(0) translateY(0) scale(1) rotateY(180deg);
+      transform: scale(1) rotateY(180deg);
       opacity: 1;
     }
   }

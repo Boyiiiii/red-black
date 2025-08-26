@@ -5,6 +5,12 @@ export interface Card {
   isGolden?: boolean;
 }
 
+export interface CardHistoryEntry {
+  card: Card;
+  result: 'win' | 'lose' | 'golden-win';
+  timestamp: number;
+}
+
 export interface GameState {
   chips: number;
   bet: number;
@@ -15,6 +21,8 @@ export interface GameState {
   consecutiveWins: number;
   isGoldenRound: boolean;
   isCardDisappearing: boolean;
+  totalWinnings: number;
+  cardHistory: CardHistoryEntry[];
 }
 
 export type BetChoice = 'red' | 'black';

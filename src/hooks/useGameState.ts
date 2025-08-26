@@ -1,13 +1,13 @@
 import { useState, useCallback } from "react";
-import type { GameState, BetChoice } from "../types";
+import type { GameState, BetChoice, CardHistoryEntry } from "../types";
 import { generateRandomCard } from "../utils/cardUtils";
 
-const INITIAL_CHIPS = 100;
+const INITIAL_CHIPS = 1000;
 
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
     chips: INITIAL_CHIPS,
-    bet: 10,
+    bet: 100,
     currentCard: null,
     isFlipping: false,
     gameResult: null,
@@ -15,6 +15,8 @@ export const useGameState = () => {
     consecutiveWins: 0,
     isGoldenRound: false,
     isCardDisappearing: false,
+    totalWinnings: 0,
+    cardHistory: [],
   });
 
   const setBet = useCallback((amount: number) => {
@@ -33,7 +35,8 @@ export const useGameState = () => {
 
   const playGame = useCallback(
     (choice: BetChoice) => {
-      if (gameState.chips < gameState.bet || gameState.isFlipping) return;
+      const fixedBet = 100;
+      if (gameState.chips < fixedBet || gameState.isFlipping) return;
 
       const isGoldenRound = gameState.consecutiveWins >= 2;
       const newCard = generateRandomCard();
@@ -48,27 +51,42 @@ export const useGameState = () => {
         gameResult: null,
         showResult: false,
         isGoldenRound,
+        bet: fixedBet,
       }));
 
       setTimeout(() => {
         const won = newCard.color === choice;
-        const reward = won && isGoldenRound ? gameState.bet * 2 : gameState.bet;
+        const reward = won && isGoldenRound ? fixedBet * 2 : fixedBet;
         const newConsecutiveWins = won ? gameState.consecutiveWins + 1 : 0;
-        
+        const gameResult = won
+          ? isGoldenRound
+            ? "golden-win"
+            : "win"
+          : "lose";
+
+        // Create history entry
+        const historyEntry: CardHistoryEntry = {
+          card: newCard,
+          result: gameResult,
+          timestamp: Date.now(),
+        };
+
         setGameState((prev) => ({
           ...prev,
           isFlipping: false,
-          gameResult: won ? (isGoldenRound ? "golden-win" : "win") : "lose",
+          gameResult,
           showResult: true,
-          chips: won ? prev.chips + reward : prev.chips - prev.bet,
+          chips: won ? prev.chips + reward : prev.chips - fixedBet,
+          totalWinnings: won ? prev.totalWinnings + reward : prev.totalWinnings,
           consecutiveWins: newConsecutiveWins,
           isGoldenRound: false,
+          cardHistory: [historyEntry, ...prev.cardHistory.slice(0, 4)], // Keep last 5
         }));
 
         // Removed automatic timeout - now handled by close button or auto-dismiss
       }, 1500);
     },
-    [gameState.chips, gameState.bet, gameState.isFlipping, gameState.consecutiveWins]
+    [gameState.chips, gameState.isFlipping, gameState.consecutiveWins]
   );
 
   const resetGame = useCallback(() => {
@@ -90,7 +108,7 @@ export const useGameState = () => {
       gameResult: null,
       isCardDisappearing: true,
     }));
-    
+
     // Remove card after animation completes
     setTimeout(() => {
       setGameState((prev) => ({

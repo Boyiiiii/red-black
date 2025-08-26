@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({
     >
       <div className="card">
         <div className={`card-front ${card?.isGolden ? 'golden' : ''}`}>
-          {card ? (
+          {card && (
             <div className={`card-content ${card.color} ${card.isGolden ? 'golden' : ''}`}>
               <div className="card-corner top-left">
                 <span className="value">{card.value}</span>
@@ -42,17 +42,11 @@ const Card: React.FC<CardProps> = ({
                 <span className="suit">{getSuitSymbol(card.suit)}</span>
               </div>
             </div>
-          ) : (
-            <div className="card-placeholder">
-              <span>?</span>
-            </div>
           )}
         </div>
-        {showBack ? (
-          <div className="card-back">
-            <div className="card-back-pattern"></div>
-          </div>
-        ) : null}
+        <div className="card-back">
+          <div className="card-back-pattern"></div>
+        </div>
       </div>
     </div>
   );
