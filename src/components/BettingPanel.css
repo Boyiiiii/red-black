@@ -147,3 +147,107 @@
 .black-indicator {
   background: linear-gradient(135deg, #2f3542, #1e2328);
 }
+
+@media (max-width: 768px) {
+  .betting-panel {
+    gap: 16px;
+    padding: 16px;
+    min-width: 250px;
+    max-width: 300px;
+    width: 90%;
+  }
+  
+  .chips-display {
+    font-size: 18px;
+    gap: 8px;
+  }
+  
+  .chips-icon {
+    font-size: 24px;
+  }
+  
+  .bet-selection h3,
+  .color-selection h3 {
+    font-size: 14px;
+    margin: 0 0 12px 0;
+  }
+  
+  .bet-buttons {
+    gap: 6px;
+  }
+  
+  .bet-button {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 40px;
+  }
+  
+  .color-buttons {
+    gap: 12px;
+  }
+  
+  .color-button {
+    padding: 14px 18px;
+    font-size: 14px;
+    min-width: 80px;
+    gap: 8px;
+  }
+  
+  .color-indicator {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #fff;
+  }
+}
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .betting-panel {
+    gap: 6px;
+    padding: 10px;
+    min-width: 180px;
+    max-width: 200px;
+    width: auto;
+  }
+  
+  .chips-display {
+    font-size: 14px;
+    gap: 6px;
+  }
+  
+  .chips-icon {
+    font-size: 16px;
+  }
+  
+  .bet-selection h3,
+  .color-selection h3 {
+    font-size: 11px;
+    margin: 0 0 4px 0;
+  }
+  
+  .bet-buttons {
+    gap: 4px;
+  }
+  
+  .bet-button {
+    padding: 4px 8px;
+    font-size: 9px;
+    min-width: 28px;
+  }
+  
+  .color-buttons {
+    gap: 8px;
+  }
+  
+  .color-button {
+    padding: 6px 10px;
+    font-size: 10px;
+    min-width: 50px;
+    gap: 4px;
+  }
+  
+  .color-indicator {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #fff;
+  }
+}

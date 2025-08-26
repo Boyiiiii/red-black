@@ -19,7 +19,7 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
   isGameInProgress,
   showResult,
 }) => {
-  const betAmounts = [5, 10, 25, 50, 100];
+  const betAmounts = [5, 10, 25, 50];
 
   return (
     <div className="betting-panel">
