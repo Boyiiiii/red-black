@@ -1,83 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useGameState } from "./hooks/useGameState";
 import Card from "./components/Card";
 import BettingPanel from "./components/BettingPanel";
 import Shop from "./components/Shop";
 import ResultAnimation from "./components/ResultAnimation";
 import RulesModal from "./components/RulesModal";
-import "./types/fullscreen";
 import "./App.css";
 
 function App() {
   const { gameState, setBet, addChips, playGame, closeResult } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleBuyChips = (amount: number) => {
     addChips(amount);
-  };
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
-    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-      document.removeEventListener(
-        "webkitfullscreenchange",
-        handleFullscreenChange
-      );
-      document.removeEventListener(
-        "mozfullscreenchange",
-        handleFullscreenChange
-      );
-      document.removeEventListener(
-        "MSFullscreenChange",
-        handleFullscreenChange
-      );
-    };
-  }, []);
-
-  const toggleFullscreen = async () => {
-    try {
-      const elem = document.documentElement;
-
-      if (
-        !document.fullscreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.msFullscreenElement
-      ) {
-        if (elem.requestFullscreen) {
-          await elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-          await elem.webkitRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          await elem.mozRequestFullScreen();
-        } else if (elem.msRequestFullscreen) {
-          await elem.msRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          await document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          await document.webkitExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          await document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          await document.msExitFullscreen();
-        }
-      }
-    } catch (error) {
-      console.log("Fullscreen not supported or blocked:", error);
-    }
   };
 
   return (
@@ -88,14 +24,9 @@ function App() {
           RED & BLACK
           <span className="title-icon">🎰</span>
         </div>
-        <div className="header-buttons">
-          <button className="fullscreen-button" onClick={toggleFullscreen}>
-            {isFullscreen ? "⛶" : "⛶"}
-          </button>
-          <button className="shop-button" onClick={() => setShowShop(true)}>
-            🏪 SHOP
-          </button>
-        </div>
+        <button className="shop-button" onClick={() => setShowShop(true)}>
+          🏪 SHOP
+        </button>
       </div>
 
       <div className="rules-section">

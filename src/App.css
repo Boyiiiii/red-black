@@ -1,11 +1,13 @@
 .app {
-  min-height: 100vh;
+  min-height: 90vh;
+  max-height: 100vh;
   background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #16213e);
   color: white;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .app::before {
@@ -38,10 +40,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
+  padding: 12px 40px;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   border-bottom: 2px solid #ffd700;
+  flex-shrink: 0;
 }
 
 .game-title {
@@ -69,35 +72,6 @@
   }
 }
 
-.header-buttons {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.fullscreen-button {
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fullscreen-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-1px);
-}
-
 .shop-button {
   padding: 12px 24px;
   background: linear-gradient(135deg, #ffd700, #ffed4e);
@@ -120,9 +94,10 @@
 .rules-section {
   display: flex;
   justify-content: center;
-  padding: 10px 0;
+  padding: 6px 0;
   background: rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .rules-button {
@@ -340,10 +315,11 @@
 }
 
 .game-footer {
-  padding: 20px;
+  padding: 12px;
   text-align: center;
   background: rgba(0, 0, 0, 0.2);
   border-top: 1px solid rgba(255, 215, 0, 0.3);
+  flex-shrink: 0;
 }
 
 .game-footer p {
@@ -379,18 +355,6 @@
     font-size: 14px;
   }
 
-  .header-buttons {
-    gap: 4px;
-  }
-  
-  .fullscreen-button {
-    padding: 4px;
-    font-size: 10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-  }
-  
   .shop-button {
     padding: 6px 12px;
     font-size: 12px;
@@ -409,21 +373,22 @@
   .game-content {
     flex: 1;
     flex-direction: column;
-    gap: 16px;
+
     align-items: center;
     min-height: 0;
     justify-content: flex-start;
-    padding-top: 20px;
+    padding-top: 50px;
+    padding-bottom: 8px;
   }
 
   .card-area {
-    gap: 12px;
+    gap: 8px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   .card-display {
@@ -512,18 +477,6 @@
     font-size: 12px;
   }
 
-  .header-buttons {
-    gap: 3px;
-  }
-  
-  .fullscreen-button {
-    padding: 3px;
-    font-size: 8px;
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-  }
-  
   .shop-button {
     padding: 4px 8px;
     font-size: 10px;
