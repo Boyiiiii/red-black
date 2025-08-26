@@ -14,6 +14,7 @@ export const useGameState = () => {
     showResult: false,
     consecutiveWins: 0,
     isGoldenRound: false,
+    isCardDisappearing: false,
   });
 
   const setBet = useCallback((amount: number) => {
@@ -77,16 +78,27 @@ export const useGameState = () => {
       gameResult: null,
       showResult: false,
       isFlipping: false,
+      isCardDisappearing: false,
     }));
   }, []);
 
   const closeResult = useCallback(() => {
+    // Start card disappearing animation
     setGameState((prev) => ({
       ...prev,
       showResult: false,
       gameResult: null,
-      currentCard: null,
+      isCardDisappearing: true,
     }));
+    
+    // Remove card after animation completes
+    setTimeout(() => {
+      setGameState((prev) => ({
+        ...prev,
+        currentCard: null,
+        isCardDisappearing: false,
+      }));
+    }, 600);
   }, []);
 
   return {

@@ -10,6 +10,25 @@
   transform-origin: left center;
 }
 
+.card-container.disappearing {
+  animation: cardDisappear 0.6s ease-in forwards;
+}
+
+@keyframes cardDisappear {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8) translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) translateY(-20px);
+  }
+}
+
 @keyframes pullFromDeck {
   0% {
     transform: translateX(-80px) translateY(-10px) scale(0.9);

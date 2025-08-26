@@ -31,8 +31,13 @@ const BettingPanel: React.FC<BettingPanelProps> = ({
         <div className="chips-icon">🪙</div>
         <span className="chips-amount">{chips}</span>
         {showChipAnimation && (
-          <div className="chip-animation">
-            +{purchasedAmount}
+          <div className="chip-animation-container">
+            <div className="chip-animation-success">
+              Purchase Successful!
+            </div>
+            <div className="chip-animation-amount">
+              Here is your chips: {purchasedAmount}
+            </div>
           </div>
         )}
       </div>

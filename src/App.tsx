@@ -62,6 +62,7 @@ function App() {
                   isFlipping={gameState.isFlipping}
                   showBack={gameState.isFlipping}
                   isPullingOut={gameState.isFlipping}
+                  isDisappearing={gameState.isCardDisappearing}
                 />
               )}
             </div>

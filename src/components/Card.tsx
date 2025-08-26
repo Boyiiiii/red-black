@@ -8,6 +8,7 @@ interface CardProps {
   isFlipping: boolean;
   showBack?: boolean;
   isPullingOut?: boolean;
+  isDisappearing?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -15,11 +16,16 @@ const Card: React.FC<CardProps> = ({
   isFlipping,
   showBack = true,
   isPullingOut = false,
+  isDisappearing = false,
 }) => {
   return (
     <div
-      className={`card-container ${isFlipping ? "flipping" : ""} ${
+      className={`card-container ${
+        isFlipping ? "flipping" : ""
+      } ${
         isPullingOut ? "pulling-out" : ""
+      } ${
+        isDisappearing ? "disappearing" : ""
       }`}
     >
       <div className="card">

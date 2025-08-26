@@ -14,6 +14,7 @@ export interface GameState {
   showResult: boolean;
   consecutiveWins: number;
   isGoldenRound: boolean;
+  isCardDisappearing: boolean;
 }
 
 export type BetChoice = 'red' | 'black';
