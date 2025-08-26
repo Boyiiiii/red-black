@@ -33,33 +33,35 @@
   animation: resultPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position: relative;
   pointer-events: auto;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 16px;
+  padding: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .close-button {
-  margin-top: 20px;
-  padding: 12px 48px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 8px;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  background: none;
+  border: none;
+  color: #ffd700;
+  font-size: 30px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  pointer-events: auto;
-  width: 120px;
+  padding: 0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  pointer-events: auto;
 }
 
 .close-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
+  background: rgba(255, 215, 0, 0.2);
+  transform: scale(1.1);
 }
 
 @keyframes resultPop {
@@ -94,26 +96,26 @@
     font-size: 24px;
     margin-bottom: 8px;
   }
-  
+
   .result-animation.golden-win .result-text {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 15px #ffd700;
   }
-  
+
   .result-amount {
     font-size: 16px;
     padding: 6px 12px;
   }
-  
+
   .result-animation.golden-win .result-amount {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
     border: 1px solid #ffb300;
   }
-  
+
   .result-icon {
     font-size: 40px;
     margin-bottom: 8px;
   }
-  
+
   .close-button {
     margin-top: 12px;
     padding: 8px 24px;
@@ -123,7 +125,11 @@
 }
 
 @keyframes iconBounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0) scale(1);
   }
   40% {
@@ -344,7 +350,8 @@
 }
 
 @keyframes sparkleShine {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(0) rotate(0deg);
   }
