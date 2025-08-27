@@ -5,7 +5,7 @@
 }
 
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -41,7 +41,9 @@ html {
 }
 
 /* Prevent double-tap zoom */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   touch-action: manipulation;
 }
 
@@ -53,14 +55,14 @@ html {
 /* Mobile specific constraints */
 @media (max-width: 768px) {
   body {
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     position: fixed;
     width: 100%;
   }
 
   #root {
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     position: relative;
   }
@@ -94,12 +96,19 @@ button:disabled {
   cursor: not-allowed;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.2;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-family: inherit;
 }
 
