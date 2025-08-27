@@ -19,6 +19,8 @@ export const useGameState = () => {
     cardHistory: [],
     cashoutWins: 0,
     pendingWinnings: 0,
+    hasHistoryExtension: false,
+    hasDoubleProgress: false,
   });
 
   const setBet = useCallback((amount: number) => {
@@ -69,7 +71,8 @@ export const useGameState = () => {
           ? newCard.color === choice 
           : newCard.suit === choice;
         const reward = won && isGoldenRound ? fixedBet * 2 : fixedBet;
-        const newConsecutiveWins = won ? gameState.consecutiveWins + 1 : 0;
+        const progressIncrease = won ? (gameState.hasDoubleProgress ? 2 : 1) : 0;
+        const newConsecutiveWins = won ? gameState.consecutiveWins + progressIncrease : 0;
         const gameResult = won
           ? isGoldenRound
             ? "golden-win"
@@ -98,7 +101,7 @@ export const useGameState = () => {
             consecutiveWins: newConsecutiveWins,
             cashoutWins: shouldResetCashout ? 1 : newCashoutWins, // Reset to 1 if over 5, otherwise use newCashoutWins
             isGoldenRound: false,
-            cardHistory: [historyEntry, ...prev.cardHistory.slice(0, 4)], // Keep last 5
+            cardHistory: [historyEntry, ...prev.cardHistory.slice(0, prev.hasHistoryExtension ? 9 : 4)], // Keep last 10 or 5
           };
         });
 
@@ -142,6 +145,30 @@ export const useGameState = () => {
     }
   }, [gameState.cashoutWins, gameState.pendingWinnings]);
 
+  const buyHistoryExtension = useCallback(() => {
+    if (gameState.chips >= 5000 && !gameState.hasHistoryExtension) {
+      setGameState((prev) => ({
+        ...prev,
+        chips: prev.chips - 5000,
+        hasHistoryExtension: true,
+      }));
+      return true;
+    }
+    return false;
+  }, [gameState.chips, gameState.hasHistoryExtension]);
+
+  const buyDoubleProgress = useCallback(() => {
+    if (gameState.chips >= 10000 && !gameState.hasDoubleProgress) {
+      setGameState((prev) => ({
+        ...prev,
+        chips: prev.chips - 10000,
+        hasDoubleProgress: true,
+      }));
+      return true;
+    }
+    return false;
+  }, [gameState.chips, gameState.hasDoubleProgress]);
+
 
   return {
     gameState,
@@ -151,5 +178,7 @@ export const useGameState = () => {
     resetGame,
     closeResult,
     cashOut,
+    buyHistoryExtension,
+    buyDoubleProgress,
   };
 };

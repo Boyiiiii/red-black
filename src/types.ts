@@ -25,6 +25,8 @@ export interface GameState {
   cardHistory: CardHistoryEntry[];
   cashoutWins: number;
   pendingWinnings: number;
+  hasHistoryExtension: boolean;
+  hasDoubleProgress: boolean;
 }
 
 export type BetChoice = 'red' | 'black' | 'hearts' | 'diamonds' | 'clubs' | 'spades';

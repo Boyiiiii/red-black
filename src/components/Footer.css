@@ -1,0 +1,25 @@
+.game-footer {
+  text-align: center;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  flex-shrink: 0;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .game-footer {
+    padding: 4px;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+}
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .game-footer {
+    padding: 2px;
+    flex-shrink: 0;
+  }
+}

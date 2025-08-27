@@ -1,0 +1,347 @@
+.progress-section {
+  display: flex;
+  justify-content: center;
+  padding: 16px 40px;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.progress-container {
+  display: flex;
+  gap: 40px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.cashout-progress, .bonus-progress {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.progress-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700, #ffed4e);
+  border-radius: 14px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #ffd700;
+  font-weight: bold;
+  min-width: 30px;
+  text-align: center;
+}
+
+.cashout-button {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.cashout-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.cashout-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.bonus-slider-wrapper {
+  width: 100%;
+}
+
+.bonus-slider-track {
+  position: relative;
+  height: 40px;
+  margin: 20px 0;
+}
+
+/* Golden card backgrounds for milestones */
+.golden-card-bg {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.mini-card {
+  width: 20px;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.golden-multiplier-bg {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.multiplier-card {
+  width: 24px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.milestone-num {
+  font-size: 8px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1;
+}
+
+.multiplier-text {
+  font-size: 6px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Progress dots */
+.bonus-dot {
+  position: absolute;
+  top: 15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+.bonus-dot.achieved {
+  background: #ffff00;
+  border-color: #ffff00;
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+}
+
+/* Milestone animations */
+.mini-card.almost-reached,
+.multiplier-card.almost-reached {
+  border-color: #ffff00;
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.4);
+}
+
+.mini-card.milestone-reached,
+.multiplier-card.milestone-reached {
+  animation: littleGold 1s ease-in-out infinite, lightShake 2s ease-in-out infinite;
+}
+
+.mini-card.super-gold,
+.multiplier-card.super-gold {
+  animation: completeGold 0.8s ease-in-out infinite;
+}
+
+/* Animation keyframes */
+@keyframes flashGold {
+  0%, 100% {
+    background: #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    background: #ffed4e;
+    box-shadow: 0 0 16px rgba(255, 237, 78, 0.8);
+  }
+}
+
+@keyframes littleGold {
+  0%, 100% {
+    background: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    background: rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.6);
+  }
+}
+
+@keyframes completeGold {
+  0%, 100% {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.8);
+  }
+  50% {
+    background: linear-gradient(135deg, #ffed4e, #ffd700);
+    box-shadow: 0 0 24px rgba(255, 215, 0, 1);
+  }
+}
+
+@keyframes lightShake {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  25% {
+    transform: translateX(-50%) translateY(-1px);
+  }
+  75% {
+    transform: translateX(-50%) translateY(1px);
+  }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .progress-section {
+    padding: 8px 16px;
+  }
+
+  .progress-container {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .progress-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .progress-bar {
+    height: 16px;
+  }
+
+  .progress-text {
+    font-size: 10px;
+  }
+
+  .cashout-button {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .bonus-slider-track {
+    height: 20px;
+    margin: 8px 0;
+  }
+
+  .mini-card {
+    width: 12px;
+    height: 16px;
+  }
+
+  .multiplier-card {
+    width: 14px;
+    height: 18px;
+  }
+
+  .milestone-num {
+    font-size: 5px;
+  }
+
+  .multiplier-text {
+    font-size: 4px;
+  }
+
+  .bonus-dot {
+    width: 3px;
+    height: 3px;
+  }
+}
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .progress-section {
+    padding: 4px 12px;
+  }
+
+  .progress-container {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .progress-label {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .progress-bar {
+    height: 12px;
+  }
+
+  .progress-text {
+    font-size: 8px;
+  }
+
+  .cashout-button {
+    font-size: 8px;
+    padding: 3px 6px;
+  }
+
+  .bonus-slider-track {
+    height: 16px;
+    margin: 4px 0;
+  }
+
+  .milestone-num {
+    font-size: 4px;
+  }
+  
+  .multiplier-text {
+    font-size: 3px;
+  }
+  
+  .mini-card {
+    width: 10px;
+    height: 14px;
+  }
+  
+  .multiplier-card {
+    width: 12px;
+    height: 16px;
+  }
+
+  .bonus-dot {
+    width: 2px;
+    height: 2px;
+  }
+}

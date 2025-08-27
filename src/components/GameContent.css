@@ -1,0 +1,653 @@
+.game-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 40px 60px;
+  min-height: 500px;
+}
+
+.left-section,
+.center-section,
+.right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-border {
+  border: 2px solid #ffd700;
+  border-radius: 20px;
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.left-section {
+  max-width: 300px;
+  gap: 20px;
+  min-height: 400px;
+}
+
+.center-section {
+  max-width: 400px;
+  gap: 20px;
+}
+
+.right-section {
+  max-width: 300px;
+  gap: 15px;
+  min-height: 400px;
+}
+
+/* Left Section - Red Controls */
+.gamble-amount {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid #ffd700;
+  backdrop-filter: blur(10px);
+  width: 100%;
+}
+
+.gamble-amount h3 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #ff4757;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.gamble-amount p {
+  margin: 0 0 10px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.chips-amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.chip-animation-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  pointer-events: none;
+}
+
+.chip-animation-success {
+  background: linear-gradient(135deg, #2ed573, #a4de6c);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
+  margin-bottom: 8px;
+  animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.chip-animation-amount {
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffd700;
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #ffd700;
+  animation: slideUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Right Section - Win Amount */
+.win-amount {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid #ffd700;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  text-align: center;
+}
+
+.history-header {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  margin-bottom: 15px;
+}
+
+.suit-gamble-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.win-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2ed573;
+}
+
+/* Buttons */
+.red-buttons {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.black-buttons {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.suit-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suit-button:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.suit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.red-button {
+  border-color: #ff4757;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 71, 87, 0.3),
+    rgba(255, 71, 87, 0.1)
+  );
+}
+
+.red-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 71, 87, 0.5),
+    rgba(255, 71, 87, 0.3)
+  );
+}
+
+.black-button {
+  border-color: #2f3640;
+  background: linear-gradient(
+    135deg,
+    rgba(47, 54, 64, 0.8),
+    rgba(47, 54, 64, 0.6)
+  );
+}
+
+.black-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(47, 54, 64, 0.9),
+    rgba(47, 54, 64, 0.7)
+  );
+}
+
+.suit-icon {
+  font-size: 28px;
+  color: inherit;
+}
+
+/* RED and BLACK main buttons */
+.color-button {
+  width: 150px;
+  height: 50px;
+  border: 3px solid;
+  border-radius: 25px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.color-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.color-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.red-main {
+  background: linear-gradient(135deg, #ff4757, #ff3742);
+  border-color: #ff4757;
+  color: white;
+}
+
+.red-main:hover {
+  background: linear-gradient(135deg, #ff3742, #ff2f3a);
+}
+
+.black-main {
+  background: linear-gradient(135deg, #2f3640, #1e272e);
+  border-color: #2f3640;
+  color: white;
+}
+
+.black-main:hover {
+  background: linear-gradient(135deg, #1e272e, #0f1419);
+}
+
+/* History Section */
+.history-section {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.history-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #ffd700;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.history-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 25px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.history-dot {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.history-dot.empty {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: transparent;
+}
+
+.history-dot.red {
+  border-color: #ff4757;
+  color: #ff4757;
+}
+
+.history-dot.black {
+  border-color: #000000;
+  color: #000000;
+}
+
+.history-dot.win {
+  background: radial-gradient(
+    circle,
+    rgba(46, 204, 113, 0.8),
+    rgba(46, 204, 113, 0.4)
+  );
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.4),
+    0 0 15px rgba(46, 204, 113, 0.2);
+}
+
+.history-dot.golden-win {
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.9),
+    rgba(255, 237, 78, 0.6)
+  );
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
+  animation: historyGlow 2s ease-in-out infinite alternate;
+}
+
+.history-dot.lose {
+  background: radial-gradient(
+    circle,
+    rgba(255, 71, 87, 0.8),
+    rgba(255, 71, 87, 0.4)
+  );
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4), 0 0 15px rgba(255, 71, 87, 0.2);
+}
+
+@keyframes historyGlow {
+  0% {
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
+  }
+}
+
+/* Card Area */
+.card-flip-area {
+  width: 160px;
+  height: 224px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-flip-area.centered {
+  margin: 0 auto;
+}
+
+.card-deck {
+  position: absolute;
+  width: 160px;
+  height: 224px;
+  z-index: 1;
+}
+
+.card-flip-area .card-container {
+  position: absolute;
+  z-index: 10;
+}
+
+/* Game Over */
+.game-over {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #ff4757, #ff3742);
+  color: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 1000;
+  border: 3px solid #ffd700;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.game-over h2 {
+  margin: 0 0 15px 0;
+  font-size: 32px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+}
+
+.game-over p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.game-over button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border: none;
+  border-radius: 25px;
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.game-over button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .game-content {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    min-height: 0;
+    justify-content: flex-start;
+    padding: 20px 16px;
+    gap: 20px;
+  }
+
+  .left-section,
+  .center-section,
+  .right-section {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .section-border {
+    padding: 15px;
+    margin: 0 5px;
+  }
+
+  .left-section {
+    order: 2;
+    gap: 15px;
+    min-height: auto;
+  }
+
+  .center-section {
+    order: 1;
+  }
+
+  .right-section {
+    order: 3;
+    gap: 15px;
+    min-height: auto;
+  }
+
+  .suit-button {
+    width: 60px;
+    height: 60px;
+  }
+
+  .suit-icon {
+    font-size: 24px;
+  }
+
+  .red-buttons,
+  .black-buttons {
+    gap: 15px;
+  }
+
+  .color-button {
+    width: 120px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .history-section h4 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .history-progress {
+    padding: 8px 15px;
+    gap: 6px;
+  }
+
+  .history-dot {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .card-flip-area {
+    width: 140px;
+    height: 196px;
+  }
+
+  .gamble-amount h3 {
+    font-size: 18px;
+  }
+
+  .chips-amount {
+    font-size: 20px;
+  }
+
+  .history-header {
+    font-size: 16px;
+  }
+
+  .suit-gamble-info {
+    font-size: 14px;
+  }
+
+  .win-value {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .game-content {
+    flex: 1;
+    flex-direction: row;
+    gap: 15px;
+    padding: 4px 12px;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 0;
+  }
+
+  .left-section,
+  .center-section,
+  .right-section {
+    order: unset;
+    max-width: 200px;
+    gap: 8px;
+    min-height: auto;
+  }
+
+  .section-border {
+    padding: 12px;
+    margin: 0 2px;
+  }
+
+  .suit-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .suit-icon {
+    font-size: 18px;
+  }
+
+  .red-buttons,
+  .black-buttons {
+    gap: 8px;
+  }
+
+  .color-button {
+    width: 100px;
+    height: 35px;
+    font-size: 14px;
+  }
+
+  .gamble-amount,
+  .win-amount {
+    padding: 8px;
+  }
+
+  .gamble-amount h3 {
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+
+  .chips-amount {
+    font-size: 16px;
+  }
+
+  .history-header {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .suit-gamble-info {
+    font-size: 12px;
+  }
+
+  .win-value {
+    font-size: 14px;
+  }
+
+  .history-section h4 {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .history-progress {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .history-dot {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+
+  .card-flip-area {
+    width: 100px;
+    height: 140px;
+  }
+}

@@ -7,7 +7,15 @@ import RulesModal from "./components/RulesModal";
 import "./App.css";
 
 function App() {
-  const { gameState, addChips, playGame, closeResult, cashOut } = useGameState();
+  const {
+    gameState,
+    addChips,
+    playGame,
+    closeResult,
+    cashOut,
+    buyHistoryExtension,
+    buyDoubleProgress,
+  } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showChipAnimation, setShowChipAnimation] = useState(false);
@@ -26,7 +34,10 @@ function App() {
         <div className="game-title">
           <span className="title-icon">🎰</span>
           RED & BLACK
-          <button className="rules-button-title" onClick={() => setShowRules(true)}>
+          <button
+            className="rules-button-title"
+            onClick={() => setShowRules(true)}
+          >
             Rules
           </button>
         </div>
@@ -41,17 +52,14 @@ function App() {
             <div className="progress-label">Cashout Progress</div>
             <div className="progress-bar-container">
               <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
+                <div
+                  className="progress-fill"
                   style={{ width: `${(gameState.cashoutWins / 5) * 100}%` }}
                 ></div>
               </div>
               <span className="progress-text">{gameState.cashoutWins}/5</span>
               {gameState.cashoutWins >= 5 && (
-                <button 
-                  className="cashout-button" 
-                  onClick={cashOut}
-                >
+                <button className="cashout-button" onClick={cashOut}>
                   Cash Out
                 </button>
               )}
@@ -62,58 +70,93 @@ function App() {
             <div className="progress-label">Bonus Progress</div>
             <div className="bonus-slider-wrapper">
               <div className="bonus-slider-track">
-                
                 {/* Golden card backgrounds for 3,6,12 */}
-                {[3, 6, 12].map(milestone => {
+                {[3, 6, 12].map((milestone) => {
                   const isAchieved = gameState.consecutiveWins >= milestone;
-                  const justReached = gameState.consecutiveWins === milestone && gameState.isGoldenRound;
-                  const almostReached = gameState.consecutiveWins === milestone - 1;
-                  const isWinning = gameState.gameResult === 'win' || gameState.gameResult === 'golden-win';
-                  
+                  const justReached =
+                    gameState.consecutiveWins === milestone &&
+                    gameState.isGoldenRound;
+                  const almostReached =
+                    gameState.consecutiveWins === milestone - 1;
+                  const isWinning =
+                    gameState.gameResult === "win" ||
+                    gameState.gameResult === "golden-win";
+
                   return (
-                    <div 
+                    <div
                       key={milestone}
-                      className={`golden-card-bg ${isAchieved ? 'achieved' : ''}`}
+                      className={`golden-card-bg ${
+                        isAchieved ? "achieved" : ""
+                      }`}
                       style={{ left: `${((milestone - 1) / 19) * 100}%` }}
                     >
-                      <div className={`mini-card ${justReached && gameState.showResult ? 'milestone-reached' : ''} ${isAchieved && isWinning && gameState.showResult ? 'super-gold' : ''} ${almostReached ? 'almost-reached' : ''}`}>
+                      <div
+                        className={`mini-card ${
+                          justReached && gameState.showResult
+                            ? "milestone-reached"
+                            : ""
+                        } ${
+                          isAchieved && isWinning && gameState.showResult
+                            ? "super-gold"
+                            : ""
+                        } ${almostReached ? "almost-reached" : ""}`}
+                      >
                         <span className="milestone-num">{milestone}</span>
                       </div>
                     </div>
                   );
                 })}
-                
+
                 {/* Golden multiplier backgrounds for 15,20 */}
-                {[{num: 15, mult: 'X15'}, {num: 20, mult: 'X20'}].map(({num, mult}) => {
+                {[
+                  { num: 15, mult: "X15" },
+                  { num: 20, mult: "X20" },
+                ].map(({ num, mult }) => {
                   const isAchieved = gameState.consecutiveWins >= num;
-                  const justReached = gameState.consecutiveWins === num && gameState.isGoldenRound;
+                  const justReached =
+                    gameState.consecutiveWins === num &&
+                    gameState.isGoldenRound;
                   const almostReached = gameState.consecutiveWins === num - 1;
-                  const isWinning = gameState.gameResult === 'win' || gameState.gameResult === 'golden-win';
-                  
+                  const isWinning =
+                    gameState.gameResult === "win" ||
+                    gameState.gameResult === "golden-win";
+
                   return (
-                    <div 
+                    <div
                       key={num}
-                      className={`golden-multiplier-bg ${isAchieved ? 'achieved' : ''}`}
+                      className={`golden-multiplier-bg ${
+                        isAchieved ? "achieved" : ""
+                      }`}
                       style={{ left: `${((num - 1) / 19) * 100}%` }}
                     >
-                      <div className={`multiplier-card ${justReached && gameState.showResult ? 'milestone-reached' : ''} ${isAchieved && isWinning && gameState.showResult ? 'super-gold' : ''} ${almostReached ? 'almost-reached' : ''}`}>
+                      <div
+                        className={`multiplier-card ${
+                          justReached && gameState.showResult
+                            ? "milestone-reached"
+                            : ""
+                        } ${
+                          isAchieved && isWinning && gameState.showResult
+                            ? "super-gold"
+                            : ""
+                        } ${almostReached ? "almost-reached" : ""}`}
+                      >
                         <span className="milestone-num">{num}</span>
                         <span className="multiplier-text">{mult}</span>
                       </div>
                     </div>
                   );
                 })}
-                
+
                 {/* Small dots for other positions */}
                 {Array.from({ length: 20 }, (_, i) => i + 1)
-                  .filter(num => ![3, 6, 12, 15, 20].includes(num))
-                  .map(num => {
+                  .filter((num) => ![3, 6, 12, 15, 20].includes(num))
+                  .map((num) => {
                     const isLitUp = gameState.consecutiveWins >= num;
-                    
+
                     return (
-                      <div 
+                      <div
                         key={num}
-                        className={`bonus-dot ${isLitUp ? 'achieved' : ''}`}
+                        className={`bonus-dot ${isLitUp ? "achieved" : ""}`}
                         style={{ left: `${((num - 1) / 19) * 100}%` }}
                       ></div>
                     );
@@ -129,7 +172,7 @@ function App() {
         {/* Left Section - Red Controls */}
         <div className="left-section section-border">
           <div className="gamble-amount">
-            <h3>RED GAMBLE</h3>
+            <h3>GAMBLE </h3>
             <p>Gamble Amount</p>
 
             <span className="chips-amount">🪙{gameState.chips}</span>
@@ -189,35 +232,41 @@ function App() {
           <div className="history-section">
             <h4>HISTORY</h4>
             <div className="history-progress">
-              {gameState.cardHistory.slice(0, 5).map((entry) => {
-                const getSuitSymbol = (suit: string) => {
-                  switch (suit) {
-                    case "hearts":
-                      return "♥";
-                    case "diamonds":
-                      return "♦";
-                    case "clubs":
-                      return "♣";
-                    case "spades":
-                      return "♠";
-                    default:
-                      return "?";
-                  }
-                };
+              {gameState.cardHistory
+                .slice(0, gameState.hasHistoryExtension ? 10 : 5)
+                .map((entry) => {
+                  const getSuitSymbol = (suit: string) => {
+                    switch (suit) {
+                      case "hearts":
+                        return "♥";
+                      case "diamonds":
+                        return "♦";
+                      case "clubs":
+                        return "♣";
+                      case "spades":
+                        return "♠";
+                      default:
+                        return "?";
+                    }
+                  };
 
-                return (
-                  <div
-                    key={entry.timestamp}
-                    className={`history-dot ${entry.card.color} ${entry.result}`}
-                  >
-                    {getSuitSymbol(entry.card.suit)}
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={entry.timestamp}
+                      className={`history-dot ${entry.card.color} ${entry.result}`}
+                    >
+                      {getSuitSymbol(entry.card.suit)}
+                    </div>
+                  );
+                })}
 
               {/* Fill remaining slots with empty dots */}
               {Array.from({
-                length: Math.max(0, 5 - gameState.cardHistory.length),
+                length: Math.max(
+                  0,
+                  (gameState.hasHistoryExtension ? 10 : 5) -
+                    gameState.cardHistory.length
+                ),
               }).map((_, index) => (
                 <div key={`empty-${index}`} className="history-dot empty" />
               ))}
@@ -231,7 +280,9 @@ function App() {
               showBack={true}
               isPullingOut={false}
               isDisappearing={gameState.isCardDisappearing}
-              hasGoldenBack={[2, 5, 11, 14, 19].includes(gameState.consecutiveWins)}
+              hasGoldenBack={[2, 5, 11, 14, 19].includes(
+                gameState.consecutiveWins
+              )}
             />
           </div>
         </div>
@@ -241,8 +292,8 @@ function App() {
           <div className="win-amount">
             <div className="history-header">WIN AMOUNT</div>
             <div className="suit-gamble-info">
-              <span>Pending Winnings</span>
-              <span className="win-value">🪙{gameState.pendingWinnings}</span>
+              <div>Pending Winnings</div>
+              <div className="win-value">🪙{gameState.pendingWinnings}</div>
             </div>
           </div>
 
@@ -298,6 +349,10 @@ function App() {
         onClose={() => setShowShop(false)}
         onBuyChips={handleBuyChips}
         currentChips={gameState.chips}
+        hasHistoryExtension={gameState.hasHistoryExtension}
+        hasDoubleProgress={gameState.hasDoubleProgress}
+        onBuyHistoryExtension={buyHistoryExtension}
+        onBuyDoubleProgress={buyDoubleProgress}
       />
 
       {gameState.gameResult && (

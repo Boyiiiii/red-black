@@ -1,0 +1,135 @@
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 40px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid #ffd700;
+  flex-shrink: 0;
+}
+
+.game-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.title-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.shop-button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border: none;
+  border-radius: 25px;
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.shop-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+  background: linear-gradient(135deg, #ffed4e, #ffd700);
+}
+
+.rules-button-title {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.rules-button-title:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .game-header {
+    padding: 8px 16px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    min-height: auto;
+  }
+
+  .game-title {
+    font-size: 18px;
+    letter-spacing: 1px;
+    gap: 8px;
+  }
+
+  .title-icon {
+    font-size: 14px;
+  }
+
+  .shop-button {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 15px;
+  }
+
+  .rules-button-title {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .game-header {
+    padding: 3px 12px;
+    min-height: auto;
+    flex-shrink: 0;
+  }
+
+  .game-title {
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    gap: 6px;
+  }
+
+  .title-icon {
+    font-size: 12px;
+  }
+
+  .shop-button {
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 12px;
+  }
+
+  .rules-button-title {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
