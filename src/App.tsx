@@ -366,6 +366,21 @@ function App() {
 
       <RulesModal isOpen={showRules} onClose={() => setShowRules(false)} />
 
+      {/* Mobile Portrait Rotation Prompt */}
+      <div className="rotate-prompt-overlay">
+        <div className="rotate-prompt-content">
+          <div className="phone-icon">
+            📱
+          </div>
+          <div className="rotate-animation">
+            🔄
+          </div>
+          <div className="rotate-text">
+            Rotate your phone for the best experience
+          </div>
+        </div>
+      </div>
+
       <div className="game-footer">
         <p>🎲 Good luck! May the cards be in your favor! 🎲</p>
       </div>
