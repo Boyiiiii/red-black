@@ -682,10 +682,8 @@
 /* Mobile Responsive */
 @media (max-width: 1023px) {
   .app {
-    min-height: 100vh;
-    min-height: 100dvh;
-    height: 100vh;
-    height: 100dvh;
+    min-height: 100svh;
+    height: 100svh;
     width: 100vw;
     position: fixed;
     top: 0;
@@ -693,7 +691,6 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
-    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
     box-sizing: border-box;
   }
   
@@ -800,7 +797,7 @@
 @media (max-height: 500px) and (orientation: landscape) and (max-width: 1023px) {
   .app {
     flex-direction: row !important;
-    height: 100vh !important;
+    height: 100svh !important;
     width: 100vw !important;
     overflow: hidden !important;
     position: fixed !important;
@@ -815,7 +812,7 @@
     width: 280px;
     min-width: 280px;
     max-width: 280px;
-    height: 100vh;
+    height: 100svh;
     border-radius: 0;
     padding: 8px;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
@@ -845,7 +842,7 @@
   .game-display-section {
     flex: 1 !important;
     width: calc(100vw - 280px) !important;
-    height: 100vh !important;
+    height: 100svh !important;
     overflow-y: auto !important;
     display: flex !important;
     flex-direction: column !important;
@@ -1235,13 +1232,8 @@
 
 /* Safe Area Support */
 @supports (padding: max(0px)) {
-  @media (max-width: 1023px) {
-    .app {
-      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
-    }
-    
+  @media (max-width: 1023px) {    
     .game-display-section {
-      padding-top: max(0px, env(safe-area-inset-top));
       padding-left: max(0px, env(safe-area-inset-left));
       padding-right: max(0px, env(safe-area-inset-right));
     }
