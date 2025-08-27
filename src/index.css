@@ -23,12 +23,58 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  overflow-x: hidden;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  user-zoom: fixed;
+  -webkit-user-zoom: fixed;
+}
+
+/* Additional zoom prevention */
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+/* Prevent double-tap zoom */
+*, *::before, *::after {
+  touch-action: manipulation;
 }
 
 #root {
   min-height: 100vh;
   width: 100%;
+}
+
+/* Mobile specific constraints */
+@media (max-width: 768px) {
+  body {
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  #root {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+}
+
+/* Desktop allows scrolling if needed */
+@media (min-width: 769px) {
+  body {
+    overflow: auto;
+  }
+
+  #root {
+    overflow: auto;
+  }
 }
 
 button {

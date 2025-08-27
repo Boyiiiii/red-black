@@ -10,6 +10,11 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.claude
+red-black-example.png
+bet-board.png
+ET-EXAMPLE.png
+example-analytics.js
 *.local
 
 # Editor directories and files

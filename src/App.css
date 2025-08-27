@@ -1,46 +1,7 @@
 /* Import component-specific CSS files */
-@import './components/Header.css';
-@import './components/Progress.css';
-@import './components/GameContent.css';
-@import './components/Footer.css';
+@import './components/TwoSectionLayout.css';
 
-.app {
-  min-height: 90vh;
-  max-height: 100vh;
-  background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #16213e);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.app::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 215, 0, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 71, 87, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(46, 213, 115, 0.05) 0%,
-      transparent 50%
-    );
-  pointer-events: none;
-  z-index: -1;
-}
+/* App styles are now in TwoSectionLayout.css */
 
 /* Rotation prompt overlay */
 .rotate-prompt-overlay {

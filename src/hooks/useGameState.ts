@@ -38,9 +38,8 @@ export const useGameState = () => {
   }, []);
 
   const playGame = useCallback(
-    (choice: BetChoice) => {
-      const fixedBet = 100;
-      if (gameState.chips < fixedBet || gameState.isFlipping) return;
+    (choice: BetChoice, betAmount: number = 100) => {
+      if (gameState.chips < betAmount || gameState.isFlipping) return;
 
       const isGoldenRound = [2, 5, 11, 14, 19].includes(gameState.consecutiveWins);
       const newCard = generateRandomCard();
@@ -55,7 +54,7 @@ export const useGameState = () => {
         gameResult: null,
         showResult: false,
         isGoldenRound,
-        bet: fixedBet,
+        bet: betAmount,
       }));
 
       // Show the card data after a short delay so the flip starts with the back
@@ -70,7 +69,7 @@ export const useGameState = () => {
         const won = choice === 'red' || choice === 'black' 
           ? newCard.color === choice 
           : newCard.suit === choice;
-        const reward = won && isGoldenRound ? fixedBet * 2 : fixedBet;
+        const reward = won && isGoldenRound ? betAmount * 2 : betAmount;
         const progressIncrease = won ? (gameState.hasDoubleProgress ? 2 : 1) : 0;
         const newConsecutiveWins = won ? gameState.consecutiveWins + progressIncrease : 0;
         const gameResult = won
@@ -95,7 +94,7 @@ export const useGameState = () => {
             isFlipping: false,
             gameResult,
             showResult: true,
-            chips: won ? prev.chips : prev.chips - fixedBet, // Only deduct on loss
+            chips: won ? prev.chips : prev.chips - betAmount, // Only deduct on loss
             pendingWinnings: won ? prev.pendingWinnings + reward : prev.pendingWinnings, // Add wins to pending
             totalWinnings: won ? prev.totalWinnings + reward : prev.totalWinnings, // Keep total for tracking
             consecutiveWins: newConsecutiveWins,

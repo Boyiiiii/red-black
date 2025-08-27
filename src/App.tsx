@@ -20,6 +20,8 @@ function App() {
   const [showRules, setShowRules] = useState(false);
   const [showChipAnimation, setShowChipAnimation] = useState(false);
   const [purchasedAmount, setPurchasedAmount] = useState(0);
+  const [betAmount, setBetAmount] = useState(100);
+  const [inputBetAmount, setInputBetAmount] = useState("100");
 
   const handleBuyChips = (amount: number) => {
     addChips(amount);
@@ -28,26 +30,41 @@ function App() {
     setTimeout(() => setShowChipAnimation(false), 2000);
   };
 
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    setBetAmount(value);
+    setInputBetAmount(value.toString());
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputBetAmount(value);
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue >= 100 && numValue <= 500) {
+      setBetAmount(numValue);
+    }
+  };
+
+  const handleInputBlur = () => {
+    const numValue = parseInt(inputBetAmount);
+    if (isNaN(numValue) || numValue < 100) {
+      setBetAmount(100);
+      setInputBetAmount("100");
+    } else if (numValue > 500) {
+      setBetAmount(500);
+      setInputBetAmount("500");
+    } else {
+      setBetAmount(numValue);
+      setInputBetAmount(numValue.toString());
+    }
+  };
+
   return (
     <div className="app">
-      <div className="game-header">
-        <div className="game-title">
-          <span className="title-icon">🎰</span>
-          RED & BLACK
-          <button
-            className="rules-button-title"
-            onClick={() => setShowRules(true)}
-          >
-            Rules
-          </button>
-        </div>
-        <button className="shop-button" onClick={() => setShowShop(true)}>
-          🏪 SHOP
-        </button>
-      </div>
-
-      <div className="progress-section">
-        <div className="progress-container">
+      {/* GAME DISPLAY AREA */}
+      <div className="game-display-section">
+        {/* Progress Bars */}
+        <div className="progress-display">
           <div className="cashout-progress">
             <div className="progress-label">Cashout Progress</div>
             <div className="progress-bar-container">
@@ -65,277 +82,213 @@ function App() {
               )}
             </div>
           </div>
-
-          <div className="bonus-progress">
-            <div className="progress-label">Bonus Progress</div>
-            <div className="bonus-slider-wrapper">
-              <div className="bonus-slider-track">
-                {/* Golden card backgrounds for 3,6,12 */}
-                {[3, 6, 12].map((milestone) => {
-                  const isAchieved = gameState.consecutiveWins >= milestone;
-                  const justReached =
-                    gameState.consecutiveWins === milestone &&
-                    gameState.isGoldenRound;
-                  const almostReached =
-                    gameState.consecutiveWins === milestone - 1;
-                  const isWinning =
-                    gameState.gameResult === "win" ||
-                    gameState.gameResult === "golden-win";
-
-                  return (
-                    <div
-                      key={milestone}
-                      className={`golden-card-bg ${
-                        isAchieved ? "achieved" : ""
-                      }`}
-                      style={{ left: `${((milestone - 1) / 19) * 100}%` }}
-                    >
-                      <div
-                        className={`mini-card ${
-                          justReached && gameState.showResult
-                            ? "milestone-reached"
-                            : ""
-                        } ${
-                          isAchieved && isWinning && gameState.showResult
-                            ? "super-gold"
-                            : ""
-                        } ${almostReached ? "almost-reached" : ""}`}
-                      >
-                        <span className="milestone-num">{milestone}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Golden multiplier backgrounds for 15,20 */}
-                {[
-                  { num: 15, mult: "X15" },
-                  { num: 20, mult: "X20" },
-                ].map(({ num, mult }) => {
-                  const isAchieved = gameState.consecutiveWins >= num;
-                  const justReached =
-                    gameState.consecutiveWins === num &&
-                    gameState.isGoldenRound;
-                  const almostReached = gameState.consecutiveWins === num - 1;
-                  const isWinning =
-                    gameState.gameResult === "win" ||
-                    gameState.gameResult === "golden-win";
-
-                  return (
-                    <div
-                      key={num}
-                      className={`golden-multiplier-bg ${
-                        isAchieved ? "achieved" : ""
-                      }`}
-                      style={{ left: `${((num - 1) / 19) * 100}%` }}
-                    >
-                      <div
-                        className={`multiplier-card ${
-                          justReached && gameState.showResult
-                            ? "milestone-reached"
-                            : ""
-                        } ${
-                          isAchieved && isWinning && gameState.showResult
-                            ? "super-gold"
-                            : ""
-                        } ${almostReached ? "almost-reached" : ""}`}
-                      >
-                        <span className="milestone-num">{num}</span>
-                        <span className="multiplier-text">{mult}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Small dots for other positions */}
-                {Array.from({ length: 20 }, (_, i) => i + 1)
-                  .filter((num) => ![3, 6, 12, 15, 20].includes(num))
-                  .map((num) => {
-                    const isLitUp = gameState.consecutiveWins >= num;
-
-                    return (
-                      <div
-                        key={num}
-                        className={`bonus-dot ${isLitUp ? "achieved" : ""}`}
-                        style={{ left: `${((num - 1) / 19) * 100}%` }}
-                      ></div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
 
-      {/* ---- MAIN CONTENT ---- */}
-      <div className="game-content">
-        {/* Left Section - Red Controls */}
-        <div className="left-section section-border">
-          <div className="gamble-amount">
-            <h3>GAMBLE </h3>
-            <p>Gamble Amount</p>
-
-            <span className="chips-amount">🪙{gameState.chips}</span>
-
-            {showChipAnimation && (
-              <div className="chip-animation-container">
-                <div className="chip-animation-success">
-                  Purchase Successful!
-                </div>
-                <div className="chip-animation-amount">
-                  Here is your chips: {purchasedAmount}
-                </div>
-              </div>
+        {/* Card Display Area */}
+        <div className="card-display">
+          <Card
+            card={gameState.currentCard}
+            isFlipping={gameState.isFlipping}
+            showBack={true}
+            isPullingOut={false}
+            isDisappearing={gameState.isCardDisappearing}
+            hasGoldenBack={[2, 5, 11, 14, 19].includes(
+              gameState.consecutiveWins
             )}
+          />
+        </div>
+
+        {/* History Display */}
+        <div className="history-display">
+          <div className="history-title">Recent Results</div>
+          <div className="history-dots">
+            {gameState.cardHistory
+              .slice(0, gameState.hasHistoryExtension ? 8 : 5)
+              .map((entry) => {
+                const getSuitSymbol = (suit: string) => {
+                  switch (suit) {
+                    case "hearts": return "♥";
+                    case "diamonds": return "♦";
+                    case "clubs": return "♣";
+                    case "spades": return "♠";
+                    default: return "?";
+                  }
+                };
+
+                return (
+                  <div
+                    key={entry.timestamp}
+                    className={`history-dot ${entry.card.color} ${entry.result}`}
+                  >
+                    {getSuitSymbol(entry.card.suit)}
+                  </div>
+                );
+              })}
+
+            {Array.from({
+              length: Math.max(
+                0,
+                (gameState.hasHistoryExtension ? 8 : 5) -
+                  gameState.cardHistory.length
+              ),
+            }).map((_, index) => (
+              <div key={`empty-${index}`} className="history-dot empty" />
+            ))}
           </div>
+        </div>
+      </div>
 
-          <button
-            className="color-button red-main"
-            onClick={() => playGame("red")}
-            disabled={
-              gameState.chips < 100 ||
-              gameState.isFlipping ||
-              gameState.showResult
-            }
-          >
-            RED
-          </button>
-
-          <div className="red-buttons">
+      {/* BETTING/ACTION PANEL */}
+      <div className="betting-action-section">
+        {/* Game Title */}
+        <div className="game-title-section">
+          <h2 className="game-title">Red & Black</h2>
+        </div>
+        
+        {/* Top Controls */}
+        <div className="betting-controls">
+          <div className="balance-info">
+            <div className="balance-item">
+              <span className="balance-label">Balance</span>
+              <span className="balance-amount">🪙{gameState.chips}</span>
+            </div>
+          </div>
+          <div className="action-buttons">
             <button
-              className="suit-button red-button hearts"
-              onClick={() => playGame("hearts")}
-              disabled={
-                gameState.chips < 100 ||
-                gameState.isFlipping ||
-                gameState.showResult
-              }
+              className="rules-button"
+              onClick={() => setShowRules(true)}
             >
-              <div className="suit-icon">♥</div>
+              Rules
             </button>
-            <button
-              className="suit-button red-button diamonds"
-              onClick={() => playGame("diamonds")}
-              disabled={
-                gameState.chips < 100 ||
-                gameState.isFlipping ||
-                gameState.showResult
-              }
-            >
-              <div className="suit-icon">♦</div>
+            <button className="shop-button" onClick={() => setShowShop(true)}>
+              🏪 Shop
             </button>
           </div>
         </div>
 
-        {/* Center Section - Card */}
-        <div className="center-section">
-          <div className="history-section">
-            <h4>HISTORY</h4>
-            <div className="history-progress">
-              {gameState.cardHistory
-                .slice(0, gameState.hasHistoryExtension ? 10 : 5)
-                .map((entry) => {
-                  const getSuitSymbol = (suit: string) => {
-                    switch (suit) {
-                      case "hearts":
-                        return "♥";
-                      case "diamonds":
-                        return "♦";
-                      case "clubs":
-                        return "♣";
-                      case "spades":
-                        return "♠";
-                      default:
-                        return "?";
-                    }
-                  };
-
-                  return (
-                    <div
-                      key={entry.timestamp}
-                      className={`history-dot ${entry.card.color} ${entry.result}`}
-                    >
-                      {getSuitSymbol(entry.card.suit)}
-                    </div>
-                  );
-                })}
-
-              {/* Fill remaining slots with empty dots */}
-              {Array.from({
-                length: Math.max(
-                  0,
-                  (gameState.hasHistoryExtension ? 10 : 5) -
-                    gameState.cardHistory.length
-                ),
-              }).map((_, index) => (
-                <div key={`empty-${index}`} className="history-dot empty" />
-              ))}
-            </div>
+        {/* Combined Bet Amount and Slider Controls */}
+        <div className="bet-amount-section">
+          <div className="bet-amount-header">
+            <span className="bet-label">Bet Amount</span>
+            <span className="bet-amount">🪙{betAmount}</span>
           </div>
-
-          <div className="card-flip-area centered">
-            <Card
-              card={gameState.currentCard}
-              isFlipping={gameState.isFlipping}
-              showBack={true}
-              isPullingOut={false}
-              isDisappearing={gameState.isCardDisappearing}
-              hasGoldenBack={[2, 5, 11, 14, 19].includes(
-                gameState.consecutiveWins
-              )}
+          <div className="bet-slider-container">
+            <input
+              type="range"
+              min="100"
+              max="500"
+              step="25"
+              value={betAmount}
+              onChange={handleSliderChange}
+              className="bet-slider"
             />
+            <div className="bet-input-container">
+              <input
+                type="number"
+                min="100"
+                max="500"
+                value={inputBetAmount}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+                className="bet-input"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Right Section - Black Controls & History */}
-        <div className="right-section section-border">
-          <div className="win-amount">
-            <div className="history-header">WIN AMOUNT</div>
-            <div className="suit-gamble-info">
-              <div>Pending Winnings</div>
-              <div className="win-value">🪙{gameState.pendingWinnings}</div>
-            </div>
-          </div>
-
-          <button
-            className="color-button black-main"
-            onClick={() => playGame("black")}
-            disabled={
-              gameState.chips < 100 ||
-              gameState.isFlipping ||
-              gameState.showResult
-            }
-          >
-            BLACK
-          </button>
-
-          <div className="black-buttons">
+        {/* Main Betting Panel */}
+        <div className="betting-panel">
+          {/* Color Betting Row */}
+          <div className="betting-row color-row">
             <button
-              className="suit-button black-button clubs"
-              onClick={() => playGame("clubs")}
+              className="bet-btn red-bet"
+              onClick={() => playGame("red", betAmount)}
               disabled={
-                gameState.chips < 100 ||
+                gameState.chips < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
             >
-              <div className="suit-icon">♣</div>
+              <span className="bet-name">RED</span>
+              <span className="bet-payout">2:1</span>
             </button>
             <button
-              className="suit-button black-button spades"
-              onClick={() => playGame("spades")}
+              className="bet-btn black-bet"
+              onClick={() => playGame("black", betAmount)}
               disabled={
-                gameState.chips < 100 ||
+                gameState.chips < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
             >
-              <div className="suit-icon">♠</div>
+              <span className="bet-name">BLACK</span>
+              <span className="bet-payout">2:1</span>
+            </button>
+          </div>
+
+          {/* Suit Betting Row */}
+          <div className="betting-row suit-row">
+            <button
+              className="bet-btn suit-btn hearts-bet"
+              onClick={() => playGame("hearts", betAmount)}
+              disabled={
+                gameState.chips < betAmount ||
+                gameState.isFlipping ||
+                gameState.showResult
+              }
+            >
+              <span className="suit-symbol">♥</span>
+              <span className="bet-payout">4:1</span>
+            </button>
+            <button
+              className="bet-btn suit-btn diamonds-bet"
+              onClick={() => playGame("diamonds", betAmount)}
+              disabled={
+                gameState.chips < betAmount ||
+                gameState.isFlipping ||
+                gameState.showResult
+              }
+            >
+              <span className="suit-symbol">♦</span>
+              <span className="bet-payout">4:1</span>
+            </button>
+            <button
+              className="bet-btn suit-btn clubs-bet"
+              onClick={() => playGame("clubs", betAmount)}
+              disabled={
+                gameState.chips < betAmount ||
+                gameState.isFlipping ||
+                gameState.showResult
+              }
+            >
+              <span className="suit-symbol">♣</span>
+              <span className="bet-payout">4:1</span>
+            </button>
+            <button
+              className="bet-btn suit-btn spades-bet"
+              onClick={() => playGame("spades", betAmount)}
+              disabled={
+                gameState.chips < betAmount ||
+                gameState.isFlipping ||
+                gameState.showResult
+              }
+            >
+              <span className="suit-symbol">♠</span>
+              <span className="bet-payout">4:1</span>
             </button>
           </div>
         </div>
       </div>
 
+      {/* Chip Purchase Animation */}
+      {showChipAnimation && (
+        <div className="chip-animation-overlay">
+          <div className="chip-success-msg">Purchase Successful!</div>
+          <div className="chip-amount-msg">+🪙{purchasedAmount}</div>
+        </div>
+      )}
+
+      {/* Game Over Modal */}
       {gameState.chips === 0 && (
         <div className="game-over">
           <h2>Game Over!</h2>
@@ -344,6 +297,7 @@ function App() {
         </div>
       )}
 
+      {/* Modals */}
       <Shop
         isOpen={showShop}
         onClose={() => setShowShop(false)}
@@ -365,25 +319,6 @@ function App() {
       )}
 
       <RulesModal isOpen={showRules} onClose={() => setShowRules(false)} />
-
-      {/* Mobile Portrait Rotation Prompt */}
-      <div className="rotate-prompt-overlay">
-        <div className="rotate-prompt-content">
-          <div className="phone-icon">
-            📱
-          </div>
-          <div className="rotate-animation">
-            🔄
-          </div>
-          <div className="rotate-text">
-            Rotate your phone for the best experience
-          </div>
-        </div>
-      </div>
-
-      <div className="game-footer">
-        <p>🎲 Good luck! May the cards be in your favor! 🎲</p>
-      </div>
     </div>
   );
 }

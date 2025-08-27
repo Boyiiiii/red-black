@@ -1,0 +1,1233 @@
+/* Two-Section Layout - ET Style */
+.app {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1a237e, #303f9f, #3f51b5);
+  color: white;
+  overflow: auto;
+  position: relative;
+}
+
+.app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(139, 195, 74, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =================== TOP SECTION - GAME DISPLAY =================== */
+.game-display-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Betting Controls (Balance + Action Buttons) */
+.betting-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.rules-button {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.rules-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.shop-button {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #64B5F6, #42A5F5);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
+}
+
+.shop-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(100, 181, 246, 0.4);
+}
+
+/* Progress Display */
+.progress-display {
+  padding: 15px 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.cashout-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #64B5F6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #64B5F6, #42A5F5);
+  border-radius: 9px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-size: 11px;
+  color: #64B5F6;
+  font-weight: bold;
+  min-width: 25px;
+  text-align: center;
+}
+
+.cashout-button {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #64B5F6, #42A5F5);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
+}
+
+.cashout-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(100, 181, 246, 0.4);
+}
+
+/* Card Display */
+.card-display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 200px;
+  max-height: 300px;
+}
+
+/* History Display */
+.history-display {
+  padding: 15px 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.history-title {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.history-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.history-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.history-dot.empty {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: transparent;
+}
+
+.history-dot.red {
+  border-color: #E57373;
+  color: #E57373;
+}
+
+.history-dot.black {
+  border-color: #333333;
+  color: #333333;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.history-dot.win {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #4CAF50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.3);
+}
+
+.history-dot.golden-win {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #FFD700;
+  color: #FFD700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  animation: historyGlow 2s ease-in-out infinite alternate;
+}
+
+.history-dot.lose {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #F44336;
+  box-shadow: 0 0 4px rgba(244, 67, 54, 0.3);
+}
+
+@keyframes historyGlow {
+  0% {
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    border-color: #FFD700;
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+    border-color: #FFED4E;
+  }
+}
+
+/* =================== BETTING PANEL - RESPONSIVE LAYOUT =================== */
+.betting-action-section {
+  background: linear-gradient(135deg, #2c3e50, #34495e, #455a64);
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: none;
+}
+
+.betting-action-section::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+/* Game Title Section */
+.game-title-section {
+  text-align: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #64B5F6;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Balance Info in Betting Controls */
+.balance-info {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.balance-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.balance-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.balance-amount {
+  font-size: 18px;
+  font-weight: bold;
+  color: #64B5F6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Combined Bet Amount Section */
+.bet-amount-section {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 181, 246, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.bet-amount-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Bet Slider Container */
+.bet-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bet-slider {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.bet-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #64B5F6, #42A5F5);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(100, 181, 246, 0.4);
+  transition: all 0.3s ease;
+}
+
+.bet-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(100, 181, 246, 0.6);
+}
+
+.bet-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #64B5F6, #42A5F5);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(100, 181, 246, 0.4);
+}
+
+.bet-input-container {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.bet-input {
+  width: 70px;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+}
+
+.bet-input:focus {
+  background: rgba(100, 181, 246, 0.1);
+}
+
+.bet-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.bet-amount {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Betting Panel */
+.betting-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  margin-top: 4px;
+}
+
+.betting-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Bet Buttons */
+.bet-btn {
+  flex: 1;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bet-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.5s;
+}
+
+.bet-btn:hover::before {
+  left: 100%;
+}
+
+.bet-btn:active {
+  transform: scale(0.98);
+}
+
+.bet-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.bet-btn:disabled::before {
+  display: none;
+}
+
+/* Color Bets */
+.red-bet {
+  background: linear-gradient(135deg, rgba(229, 115, 115, 0.9), rgba(239, 83, 80, 0.7));
+  border-color: rgba(229, 115, 115, 0.3);
+}
+
+.red-bet:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(229, 115, 115, 1), rgba(239, 83, 80, 0.8));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(229, 115, 115, 0.4);
+}
+
+.black-bet {
+  background: linear-gradient(135deg, rgba(66, 66, 66, 0.9), rgba(33, 33, 33, 0.7));
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.black-bet:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(66, 66, 66, 1), rgba(33, 33, 33, 0.8));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Suit Bets */
+.suit-btn {
+  max-width: 70px;
+  height: 46px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.suit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.hearts-bet .suit-symbol,
+.diamonds-bet .suit-symbol {
+  color: #E57373;
+  text-shadow: 0 0 6px rgba(229, 115, 115, 0.5);
+}
+
+.clubs-bet .suit-symbol,
+.spades-bet .suit-symbol {
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+}
+
+/* Button Text */
+.bet-name {
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.bet-payout {
+  font-size: 10px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.suit-symbol {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+/* Chip Animation */
+.chip-animation-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  text-align: center;
+  pointer-events: none;
+}
+
+.chip-success-msg {
+  background: linear-gradient(135deg, #64B5F6, #42A5F5);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(100, 181, 246, 0.4);
+  margin-bottom: 8px;
+  animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.chip-amount-msg {
+  background: rgba(0, 0, 0, 0.8);
+  color: #64B5F6;
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-weight: bold;
+  border: 1px solid #64B5F6;
+  animation: slideUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Game Over Modal */
+.game-over {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #E57373, #EF5350);
+  color: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 1000;
+  border: 3px solid #64B5F6;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.game-over h2 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.game-over p {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.game-over button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #64B5F6, #42A5F5);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(100, 181, 246, 0.4);
+}
+
+.game-over button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(100, 181, 246, 0.5);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .game-header {
+    padding: 10px 16px;
+  }
+
+  .game-title {
+    font-size: 20px;
+  }
+
+  .balance-info {
+    padding: 12px 16px;
+  }
+
+  .balance-amount, .win-amount {
+    font-size: 14px;
+  }
+
+  .progress-display {
+    padding: 12px 16px;
+  }
+
+  .card-display {
+    padding: 15px;
+    min-height: 180px;
+  }
+
+  .history-display {
+    padding: 12px 16px;
+  }
+
+  .history-dots {
+    gap: 5px;
+  }
+
+  .history-dot {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+
+  .betting-action-section {
+    padding: 14px;
+  }
+
+  .bet-amount-info {
+    padding: 8px 14px;
+    margin-bottom: 10px;
+  }
+
+  .bet-btn {
+    height: 46px;
+  }
+
+  .bet-name {
+    font-size: 12px;
+  }
+
+  .bet-payout {
+    font-size: 9px;
+  }
+
+  .suit-btn {
+    height: 42px;
+    max-width: 65px;
+  }
+
+  .suit-symbol {
+    font-size: 16px;
+  }
+
+  /* Mobile bet slider adjustments */
+  .bet-amount-section {
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  .bet-amount-header {
+    margin-bottom: 8px;
+  }
+
+  .bet-slider-container {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .bet-input {
+    width: 60px;
+    font-size: 12px;
+  }
+
+  .game-title {
+    font-size: 16px;
+  }
+
+  .game-title-section {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+}
+
+/* Mobile Landscape Mode - Side-by-Side Layout */
+@media (max-height: 500px) and (orientation: landscape) and (max-width: 900px) {
+  .app {
+    flex-direction: row !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  /* Betting section becomes left sidebar */
+  .betting-action-section {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    height: 100vh;
+    border-radius: 0;
+    padding: 8px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+    background: linear-gradient(180deg, #2c3e50, #34495e, #455a64);
+    display: flex;
+    flex-direction: column;
+    order: 1;
+    flex-shrink: 0;
+  }
+
+  .game-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .game-title-section {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .betting-action-section::before {
+    display: none;
+  }
+
+  /* Game display section takes remaining space */
+  .game-display-section {
+    flex: 1 !important;
+    width: calc(100vw - 280px) !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    order: 2 !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    position: relative !important;
+    min-width: 0 !important;
+  }
+
+  .progress-display {
+    padding: 8px 12px !important;
+    flex-shrink: 0 !important;
+    background: rgba(0, 0, 0, 0.15) !important;
+    border-bottom: 1px solid rgba(76, 175, 80, 0.2) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .progress-label {
+    font-size: 10px;
+  }
+
+  .progress-bar {
+    height: 16px;
+  }
+
+  .progress-bar-container {
+    max-width: 200px;
+  }
+
+  .progress-text {
+    font-size: 9px;
+  }
+
+  .cashout-button {
+    padding: 3px 8px;
+    font-size: 8px;
+  }
+
+  /* Card display should be prominent in landscape */
+  .card-display {
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px !important;
+    min-height: 180px !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .history-display {
+    padding: 8px 12px !important;
+    flex-shrink: 0 !important;
+    background: rgba(0, 0, 0, 0.15) !important;
+    border-top: 1px solid rgba(76, 175, 80, 0.2) !important;
+    text-align: center !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .history-title {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+
+  .history-dots {
+    gap: 4px;
+  }
+
+  .history-dot {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  /* Betting controls in landscape */
+  .betting-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .balance-info {
+    justify-content: center;
+  }
+
+  .balance-item {
+    align-items: center;
+  }
+
+  .balance-label {
+    font-size: 9px;
+  }
+
+  .balance-amount {
+    font-size: 14px;
+  }
+
+  .action-buttons {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .rules-button, .shop-button {
+    padding: 4px 8px;
+    font-size: 9px;
+  }
+
+  .bet-amount-info {
+    padding: 6px 8px;
+    margin-bottom: 10px;
+  }
+
+  .bet-label {
+    font-size: 9px;
+  }
+
+  .bet-amount {
+    font-size: 12px;
+  }
+
+  .betting-panel {
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .betting-row {
+    gap: 4px;
+  }
+
+  .bet-btn {
+    height: 28px;
+  }
+
+  .bet-name {
+    font-size: 9px;
+  }
+
+  .bet-payout {
+    font-size: 7px;
+  }
+
+  /* Stack color buttons vertically in landscape */
+  .color-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .color-row .bet-btn {
+    height: 24px;
+  }
+
+  /* Suit buttons in 2x2 grid */
+  .suit-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .suit-btn {
+    height: 26px;
+    max-width: none;
+  }
+
+  .suit-symbol {
+    font-size: 11px;
+  }
+
+  /* Bet slider adjustments for landscape */
+  .bet-slider-container {
+    padding: 4px 6px;
+    margin-bottom: 6px;
+    gap: 8px;
+  }
+
+  .bet-slider {
+    height: 4px;
+  }
+
+  .bet-slider::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  .bet-input {
+    width: 55px;
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
+  /* Ensure all game content is visible */
+  .cashout-progress,
+  .progress-bar-container,
+  .progress-label,
+  .progress-bar,
+  .progress-fill,
+  .progress-text,
+  .history-dots,
+  .history-dot {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .progress-label,
+  .history-title {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .game-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .game-title-section {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+  }
+
+  .bet-amount-section {
+    margin-bottom: 8px;
+    padding: 10px 12px;
+  }
+
+  .bet-amount-header {
+    margin-bottom: 6px;
+  }
+}
+
+/* Desktop/Tablet - Full Layout */
+@media (min-width: 900px) {
+  .app {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .game-display-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    order: 2;
+  }
+
+  .progress-display {
+    flex-shrink: 0;
+    padding: 25px 40px;
+  }
+
+  .progress-label {
+    font-size: 14px;
+  }
+
+  .progress-bar {
+    height: 24px;
+  }
+
+  .progress-text {
+    font-size: 12px;
+  }
+
+  .cashout-button {
+    padding: 6px 16px;
+    font-size: 11px;
+  }
+
+  .card-display {
+    flex: 1;
+    min-height: 300px;
+    max-height: none;
+    padding: 30px;
+  }
+
+  .history-display {
+    flex-shrink: 0;
+    padding: 25px 40px;
+  }
+
+  .history-title {
+    font-size: 13px;
+  }
+
+  .history-dots {
+    gap: 10px;
+  }
+
+  .history-dot {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .betting-action-section {
+    flex-shrink: 0;
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: 100vh;
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    order: 1;
+    overflow-y: auto;
+  }
+
+  .betting-controls {
+    margin-bottom: 12px;
+  }
+
+  .balance-amount {
+    font-size: 20px;
+  }
+
+  .rules-button, .shop-button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .bet-amount-info {
+    padding: 12px 20px;
+    margin-bottom: 12px;
+  }
+
+  .bet-amount {
+    font-size: 18px;
+  }
+
+  .betting-panel {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .betting-row {
+    gap: 12px;
+  }
+
+  .bet-btn {
+    height: 50px;
+  }
+
+  .bet-name {
+    font-size: 16px;
+  }
+
+  .bet-payout {
+    font-size: 12px;
+  }
+
+  .suit-btn {
+    height: 46px;
+    max-width: 80px;
+  }
+
+  .suit-symbol {
+    font-size: 22px;
+  }
+
+  /* Desktop color buttons side by side */
+  .color-row {
+    flex-direction: row;
+  }
+
+  /* Desktop suit buttons in single row */
+  .suit-row {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+/* Safe Area Support */
+@supports (padding: max(0px)) {
+  .game-header {
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+
+  .betting-action-section {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
