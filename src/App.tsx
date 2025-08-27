@@ -9,12 +9,13 @@ import "./App.css";
 function App() {
   const {
     gameState,
-    addChips,
+    addSweepstakeCoins,
     playGame,
     closeResult,
     cashOut,
     buyHistoryExtension,
     buyDoubleProgress,
+    buySweepstakeCoinsWithGC,
   } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
@@ -23,8 +24,8 @@ function App() {
   const [betAmount, setBetAmount] = useState(100);
   const [inputBetAmount, setInputBetAmount] = useState("100");
 
-  const handleBuyChips = (amount: number) => {
-    addChips(amount);
+  const handleBuySweepstakeCoins = (amount: number) => {
+    addSweepstakeCoins(amount);
     setPurchasedAmount(amount);
     setShowChipAnimation(true);
     setTimeout(() => setShowChipAnimation(false), 2000);
@@ -63,22 +64,51 @@ function App() {
     <div className="app">
       {/* GAME DISPLAY AREA */}
       <div className="game-display-section">
-        {/* Progress Bars */}
+        {/* Consecutive Wins Display */}
         <div className="progress-display">
-          <div className="cashout-progress">
-            <div className="progress-label">Cashout Progress</div>
-            <div className="progress-bar-container">
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${(gameState.cashoutWins / 5) * 100}%` }}
-                ></div>
+          <div className="consecutive-wins-display">
+            <div className="wins-section">
+              <div className="wins-label">Consecutive Wins:</div>
+              <div className="wins-count">{gameState.consecutiveWins}</div>
+            </div>
+
+            <div className="cashout-section">
+              {/* Always show potential GC and bonus rate */}
+              <div className="potential-earnings">
+                Potential:{" "}
+                {(
+                  (gameState.consecutiveWins || 1) *
+                  gameState.baseCashoutRate *
+                  gameState.cashoutBonus
+                ).toFixed(2)}{" "}
+                Golden Coins
               </div>
-              <span className="progress-text">{gameState.cashoutWins}/5</span>
-              {gameState.cashoutWins >= 5 && (
-                <button className="cashout-button" onClick={cashOut}>
-                  Cash Out
-                </button>
+              <div className="bonus-rate">
+                Bonus: {gameState.cashoutBonus.toFixed(1)}x
+              </div>
+
+              {/* Show cashout controls when available */}
+              {gameState.canCashout && gameState.cashoutTimer && (
+                <div className="cashout-controls-row">
+                  <div className="cashout-timer-large">
+                    {gameState.cashoutTimer}s
+                  </div>
+                  <button className="cashout-button-large" onClick={cashOut}>
+                    Cashout {(
+                      gameState.consecutiveWins *
+                      gameState.baseCashoutRate *
+                      gameState.cashoutBonus
+                    ).toFixed(2)} Golden Coins
+                  </button>
+                  <div className="potential-amount-large">
+                    {(
+                      gameState.consecutiveWins *
+                      gameState.baseCashoutRate *
+                      gameState.cashoutBonus
+                    ).toFixed(2)}{" "}
+                    GC
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -107,11 +137,16 @@ function App() {
               .map((entry) => {
                 const getSuitSymbol = (suit: string) => {
                   switch (suit) {
-                    case "hearts": return "♥";
-                    case "diamonds": return "♦";
-                    case "clubs": return "♣";
-                    case "spades": return "♠";
-                    default: return "?";
+                    case "hearts":
+                      return "♥";
+                    case "diamonds":
+                      return "♦";
+                    case "clubs":
+                      return "♣";
+                    case "spades":
+                      return "♠";
+                    default:
+                      return "?";
                   }
                 };
 
@@ -140,30 +175,35 @@ function App() {
 
       {/* BETTING/ACTION PANEL */}
       <div className="betting-action-section">
-        {/* Game Title */}
+        {/* Header with Sweepstake Coins and GC Display */}
+        <div className="bet-section-header">
+          <div className="gold-coins-display">
+            <div className="gold-coins-label">Golden Coin</div>
+            <div className="gold-coins-amount">
+              💰 {gameState.goldCoins.toFixed(1)}
+            </div>
+          </div>
+          <div className="balance-info">
+            <div className="balance-item">
+              <div className="balance-label">Sweepstake Coins</div>
+              <div className="balance-amount">
+                🪙{gameState.sweepstakeCoins}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Game Title and Controls - 2 rows */}
         <div className="game-title-section">
           <h2 className="game-title">Red & Black</h2>
         </div>
-        
-        {/* Top Controls */}
-        <div className="betting-controls">
-          <div className="balance-info">
-            <div className="balance-item">
-              <span className="balance-label">Balance</span>
-              <span className="balance-amount">🪙{gameState.chips}</span>
-            </div>
-          </div>
-          <div className="action-buttons">
-            <button
-              className="rules-button"
-              onClick={() => setShowRules(true)}
-            >
-              Rules
-            </button>
-            <button className="shop-button" onClick={() => setShowShop(true)}>
-              🏪 Shop
-            </button>
-          </div>
+        <div className="action-buttons-row">
+          <button className="rules-button" onClick={() => setShowRules(true)}>
+            Rules
+          </button>
+          <button className="shop-button" onClick={() => setShowShop(true)}>
+            🏪 Shop
+          </button>
         </div>
 
         {/* Combined Bet Amount and Slider Controls */}
@@ -204,7 +244,7 @@ function App() {
               className="bet-btn red-bet"
               onClick={() => playGame("red", betAmount)}
               disabled={
-                gameState.chips < betAmount ||
+                gameState.sweepstakeCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -216,7 +256,7 @@ function App() {
               className="bet-btn black-bet"
               onClick={() => playGame("black", betAmount)}
               disabled={
-                gameState.chips < betAmount ||
+                gameState.sweepstakeCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -232,7 +272,7 @@ function App() {
               className="bet-btn suit-btn hearts-bet"
               onClick={() => playGame("hearts", betAmount)}
               disabled={
-                gameState.chips < betAmount ||
+                gameState.sweepstakeCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -244,7 +284,7 @@ function App() {
               className="bet-btn suit-btn diamonds-bet"
               onClick={() => playGame("diamonds", betAmount)}
               disabled={
-                gameState.chips < betAmount ||
+                gameState.sweepstakeCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -256,7 +296,7 @@ function App() {
               className="bet-btn suit-btn clubs-bet"
               onClick={() => playGame("clubs", betAmount)}
               disabled={
-                gameState.chips < betAmount ||
+                gameState.sweepstakeCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -268,7 +308,7 @@ function App() {
               className="bet-btn suit-btn spades-bet"
               onClick={() => playGame("spades", betAmount)}
               disabled={
-                gameState.chips < betAmount ||
+                gameState.sweepstakeCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -289,11 +329,13 @@ function App() {
       )}
 
       {/* Game Over Modal */}
-      {gameState.chips === 0 && (
-        <div className="game-over">
-          <h2>Game Over!</h2>
-          <p>You're out of chips! Visit the shop to buy more.</p>
-          <button onClick={() => setShowShop(true)}>Go to Shop</button>
+      {gameState.sweepstakeCoins === 0 && !gameState.showResult && (
+        <div className="game-over-overlay">
+          <div className="game-over">
+            <h2>Game Over!</h2>
+            <p>You're out of Sweepstake Coins! Visit the shop to buy more.</p>
+            <button onClick={() => setShowShop(true)}>Go to Shop</button>
+          </div>
         </div>
       )}
 
@@ -301,12 +343,14 @@ function App() {
       <Shop
         isOpen={showShop}
         onClose={() => setShowShop(false)}
-        onBuyChips={handleBuyChips}
-        currentChips={gameState.chips}
+        onBuySweepstakeCoins={handleBuySweepstakeCoins}
+        currentSweepstakeCoins={gameState.sweepstakeCoins}
+        currentGoldCoins={gameState.goldCoins}
         hasHistoryExtension={gameState.hasHistoryExtension}
         hasDoubleProgress={gameState.hasDoubleProgress}
         onBuyHistoryExtension={buyHistoryExtension}
         onBuyDoubleProgress={buyDoubleProgress}
+        onBuySweepstakeCoinsWithGC={buySweepstakeCoinsWithGC}
       />
 
       {gameState.gameResult && (

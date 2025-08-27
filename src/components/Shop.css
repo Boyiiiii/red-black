@@ -289,14 +289,22 @@
   transform: translateY(-2px);
 }
 
-.payment-button.google-pay {
-  background: linear-gradient(135deg, #4285f4, #34a853);
-  color: white;
+.payment-button.gold-coin {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000;
+  font-weight: bold;
 }
 
-.payment-button.google-pay:hover {
-  background: linear-gradient(135deg, #34a853, #fbbc05);
+.payment-button.gold-coin:hover {
+  background: linear-gradient(135deg, #FFA500, #FF8C00);
   transform: translateY(-2px);
+}
+
+.payment-button.gold-coin:disabled {
+  background: linear-gradient(135deg, #999, #666) !important;
+  color: #ccc !important;
+  cursor: not-allowed !important;
+  transform: none !important;
 }
 
 .shop-tabs {

@@ -4,50 +4,79 @@ import "./Shop.css";
 interface ShopProps {
   isOpen: boolean;
   onClose: () => void;
-  onBuyChips: (amount: number) => void;
-  currentChips: number;
+  onBuySweepstakeCoins: (amount: number) => void;
+  currentSweepstakeCoins: number;
+  currentGoldCoins: number;
   hasHistoryExtension: boolean;
   hasDoubleProgress: boolean;
   onBuyHistoryExtension: () => boolean;
   onBuyDoubleProgress: () => boolean;
+  onBuySweepstakeCoinsWithGC: (scAmount: number, gcCost: number) => boolean;
 }
 
 const Shop: React.FC<ShopProps> = ({
   isOpen,
   onClose,
-  onBuyChips,
-  currentChips,
+  onBuySweepstakeCoins,
+  currentSweepstakeCoins,
+  currentGoldCoins,
   hasHistoryExtension,
   hasDoubleProgress,
   onBuyHistoryExtension,
   onBuyDoubleProgress,
+  onBuySweepstakeCoinsWithGC,
 }) => {
-  const [activeTab, setActiveTab] = useState<'chips' | 'properties'>('chips');
+  const [activeTab, setActiveTab] = useState<'sweepstake' | 'properties'>('sweepstake');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<{chips: number, price: number} | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<{chips: number, price: number, gcCost?: number} | null>(null);
   
-  const packages = [
+  // PayPal packages (real money)
+  const paypalPackages = [
     { chips: 1000, price: 1.99, popular: false },
     { chips: 3000, price: 3.99, popular: true },
     { chips: 5000, price: 6.99, popular: false },
+  ];
+
+  // Gold Coin packages (use GC to buy SC)
+  const goldCoinPackages = [
+    { chips: 500, gcCost: 0.5, popular: false },
+    { chips: 1000, gcCost: 1.0, popular: true },
+    { chips: 2000, gcCost: 1.8, popular: false },
   ];
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isAndroid = /Android/.test(navigator.userAgent);
 
   const handleBuy = (pkg: {chips: number, price: number}) => {
-    setSelectedPackage(pkg);
+    // Calculate Gold Coin cost (price in USD / 0.10 per GC)
+    const gcCost = pkg.price / 0.10;
+    setSelectedPackage({ ...pkg, gcCost });
     setShowPaymentModal(true);
   };
 
   const handlePayment = (method: string) => {
     if (selectedPackage) {
-      // In a real app, integrate with actual payment processors
-      console.log(`Processing ${method} payment for ${selectedPackage.chips} chips`);
-      onBuyChips(selectedPackage.chips);
-      setShowPaymentModal(false);
-      setSelectedPackage(null);
-      onClose();
+      let success = false;
+      
+      if (method === 'Gold Coin' && selectedPackage.gcCost) {
+        // Use Gold Coins to buy Sweepstake Coins
+        success = onBuySweepstakeCoinsWithGC(selectedPackage.chips, selectedPackage.gcCost);
+        if (!success) {
+          alert(`Not enough Gold Coins! You need ${selectedPackage.gcCost} GC.`);
+          return;
+        }
+      } else {
+        // PayPal payment (demo - just add the chips)
+        console.log(`Processing ${method} payment for ${selectedPackage.chips} Sweepstake Coins`);
+        onBuySweepstakeCoins(selectedPackage.chips);
+        success = true;
+      }
+      
+      if (success) {
+        setShowPaymentModal(false);
+        setSelectedPackage(null);
+        onClose();
+      }
     }
   };
 
@@ -84,15 +113,15 @@ const Shop: React.FC<ShopProps> = ({
         </div>
 
         <div className="current-chips">
-          Current Chips: <span className="chips-count">{currentChips}</span>
+          Current Sweepstake Coins: <span className="chips-count">{currentSweepstakeCoins}</span>
         </div>
 
         <div className="shop-tabs">
           <button 
-            className={`tab-button ${activeTab === 'chips' ? 'active' : ''}`}
-            onClick={() => setActiveTab('chips')}
+            className={`tab-button ${activeTab === 'sweepstake' ? 'active' : ''}`}
+            onClick={() => setActiveTab('sweepstake')}
           >
-            🪙 Chips
+            🪙 Sweepstake Coins
           </button>
           <button 
             className={`tab-button ${activeTab === 'properties' ? 'active' : ''}`}
@@ -102,10 +131,10 @@ const Shop: React.FC<ShopProps> = ({
           </button>
         </div>
 
-        {activeTab === 'chips' ? (
+        {activeTab === 'sweepstake' ? (
           <>
             <div className="packages-grid">
-              {packages.map((pkg, index) => (
+              {paypalPackages.map((pkg, index) => (
                 <div
                   key={index}
                   className={`package-card ${pkg.popular ? "popular" : ""}`}
@@ -176,8 +205,9 @@ const Shop: React.FC<ShopProps> = ({
               </button>
             </div>
             <div className="payment-details">
-              <p>Purchase: {selectedPackage?.chips} chips</p>
-              <p>Price: ${selectedPackage?.price}</p>
+              <p>Purchase: {selectedPackage?.chips} Sweepstake Coins</p>
+              <p>Price: ${selectedPackage?.price} (or {selectedPackage?.gcCost} GC)</p>
+              <p>Your Gold Coins: {currentGoldCoins.toFixed(1)} GC</p>
             </div>
             <div className="payment-methods">
               <button 
@@ -186,22 +216,13 @@ const Shop: React.FC<ShopProps> = ({
               >
                 💳 PayPal
               </button>
-              {isIOS && (
-                <button 
-                  className="payment-button apple-pay"
-                  onClick={() => handlePayment('Apple Pay')}
-                >
-                  🍎 Apple Pay
-                </button>
-              )}
-              {isAndroid && (
-                <button 
-                  className="payment-button google-pay"
-                  onClick={() => handlePayment('Google Pay')}
-                >
-                  🔵 Google Pay
-                </button>
-              )}
+              <button 
+                className="payment-button gold-coin"
+                onClick={() => handlePayment('Gold Coin')}
+                disabled={!selectedPackage?.gcCost || currentGoldCoins < selectedPackage.gcCost}
+              >
+                🏆 Gold Coins {selectedPackage?.gcCost && currentGoldCoins < selectedPackage.gcCost ? '(Insufficient)' : ''}
+              </button>
             </div>
           </div>
         </div>
