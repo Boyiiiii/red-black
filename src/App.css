@@ -91,33 +91,281 @@
   background: linear-gradient(135deg, #ffed4e, #ffd700);
 }
 
-.rules-section {
-  display: flex;
-  justify-content: center;
-  padding: 6px 0;
-  background: rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-  flex-shrink: 0;
-}
-
-.rules-button {
-  padding: 6px 16px;
+.rules-button-title {
+  padding: 8px 16px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 15px;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(5px);
 }
 
-.rules-button:hover {
+.rules-button-title:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
   color: white;
   transform: translateY(-1px);
+}
+
+.progress-section {
+  display: flex;
+  justify-content: center;
+  padding: 16px 40px;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.progress-container {
+  display: flex;
+  gap: 40px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.cashout-progress, .bonus-progress {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.progress-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700, #ffed4e);
+  border-radius: 14px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #ffd700;
+  font-weight: bold;
+  min-width: 30px;
+  text-align: center;
+}
+
+.cashout-button {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.cashout-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.cashout-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+.bonus-slider-wrapper {
+  width: 100%;
+}
+
+.bonus-slider-track {
+  position: relative;
+  height: 40px;
+  margin: 20px 0;
+}
+
+
+/* Golden card backgrounds for milestones 2,4,6,8 */
+.golden-card-bg {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.mini-card {
+  width: 20px;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Golden multiplier backgrounds for 10,15,20 */
+.golden-multiplier-bg {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.multiplier-card {
+  width: 24px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  padding: 1px;
+}
+
+.milestone-num {
+  font-size: 8px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1;
+}
+
+.multiplier-text {
+  font-size: 6px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Progress dots */
+.bonus-dot {
+  position: absolute;
+  top: 15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+.bonus-dot.achieved {
+  background: #ffff00;
+  border-color: #ffff00;
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+}
+
+/* Animation keyframes */
+@keyframes flashGold {
+  0%, 100% {
+    background: #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    background: #ffed4e;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(-2deg); }
+  75% { transform: translateY(2px) rotate(2deg); }
+}
+
+@keyframes superGold {
+  0%, 100% {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+  50% {
+    background: linear-gradient(135deg, #ffed4e, #fff700);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+  }
+}
+
+/* Light shake when reaching milestone */
+@keyframes lightShake {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.5px); }
+}
+
+/* Very little gold effect when reaching milestone */
+@keyframes littleGold {
+  0%, 100% {
+    background: white;
+    border-color: rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    background: rgba(255, 215, 0, 0.05);
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* Complete golden effect when winning */
+@keyframes completeGold {
+  0%, 100% {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    border-color: #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+  50% {
+    background: linear-gradient(135deg, #ffed4e, #fff700);
+    border-color: #fff700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+  }
+}
+
+.mini-card.almost-reached,
+.multiplier-card.almost-reached {
+  border-color: #ffff00;
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.4);
+}
+
+.mini-card.milestone-reached,
+.multiplier-card.milestone-reached {
+  animation: littleGold 1s ease-in-out infinite, lightShake 2s ease-in-out infinite;
+}
+
+.mini-card.super-gold,
+.multiplier-card.super-gold {
+  animation: completeGold 0.8s ease-in-out infinite;
 }
 
 .game-content {
@@ -706,13 +954,18 @@
     border-radius: 15px;
   }
 
-  .rules-section {
-    padding: 4px 0;
+  .progress-section {
+    padding: 12px 20px;
   }
 
-  .rules-button {
-    padding: 4px 12px;
-    font-size: 10px;
+  .progress-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .rules-button-title {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 
   .game-content {
@@ -865,14 +1118,45 @@
     border-radius: 12px;
   }
 
-  .rules-section {
-    padding: 2px 0;
-    flex-shrink: 0;
+  .progress-section {
+    padding: 8px 16px;
   }
 
-  .rules-button {
-    padding: 2px 8px;
-    font-size: 9px;
+  .progress-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .progress-label {
+    font-size: 12px;
+  }
+
+  .cashout-button {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .milestone-num {
+    font-size: 6px;
+  }
+  
+  .multiplier-text {
+    font-size: 5px;
+  }
+  
+  .mini-card {
+    width: 16px;
+    height: 22px;
+  }
+  
+  .multiplier-card {
+    width: 20px;
+    height: 26px;
+  }
+
+  .rules-button-title {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 
   .game-content {

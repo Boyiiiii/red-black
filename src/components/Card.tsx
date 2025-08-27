@@ -9,29 +9,30 @@ interface CardProps {
   showBack?: boolean;
   isPullingOut?: boolean;
   isDisappearing?: boolean;
+  hasGoldenBack?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
   card,
   isFlipping,
-  showBack = true,
   isPullingOut = false,
   isDisappearing = false,
+  hasGoldenBack = false,
 }) => {
   return (
     <div
-      className={`card-container ${
-        isFlipping ? "flipping" : ""
-      } ${
+      className={`card-container ${isFlipping ? "flipping" : ""} ${
         isPullingOut ? "pulling-out" : ""
-      } ${
-        isDisappearing ? "disappearing" : ""
-      }`}
+      } ${isDisappearing ? "disappearing" : ""}`}
     >
       <div className="card">
-        <div className={`card-front ${card?.isGolden ? 'golden' : ''}`}>
+        <div className={`card-front ${card?.isGolden ? "golden" : ""}`}>
           {card && (
-            <div className={`card-content ${card.color} ${card.isGolden ? 'golden' : ''}`}>
+            <div
+              className={`card-content ${card.color} ${
+                card.isGolden ? "golden" : ""
+              }`}
+            >
               <div className="card-corner top-left">
                 <span className="value">{card.value}</span>
                 <span className="suit">{getSuitSymbol(card.suit)}</span>
@@ -44,7 +45,7 @@ const Card: React.FC<CardProps> = ({
             </div>
           )}
         </div>
-        <div className="card-back">
+        <div className={`card-back ${hasGoldenBack ? "golden-back" : ""}`}>
           <div className="card-back-pattern"></div>
         </div>
       </div>

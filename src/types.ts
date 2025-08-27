@@ -23,6 +23,8 @@ export interface GameState {
   isCardDisappearing: boolean;
   totalWinnings: number;
   cardHistory: CardHistoryEntry[];
+  cashoutWins: number;
+  pendingWinnings: number;
 }
 
-export type BetChoice = 'red' | 'black';
+export type BetChoice = 'red' | 'black' | 'hearts' | 'diamonds' | 'clubs' | 'spades';

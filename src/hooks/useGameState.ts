@@ -17,6 +17,8 @@ export const useGameState = () => {
     isCardDisappearing: false,
     totalWinnings: 0,
     cardHistory: [],
+    cashoutWins: 0,
+    pendingWinnings: 0,
   });
 
   const setBet = useCallback((amount: number) => {
@@ -38,7 +40,7 @@ export const useGameState = () => {
       const fixedBet = 100;
       if (gameState.chips < fixedBet || gameState.isFlipping) return;
 
-      const isGoldenRound = gameState.consecutiveWins >= 2;
+      const isGoldenRound = [2, 5, 11, 14, 19].includes(gameState.consecutiveWins);
       const newCard = generateRandomCard();
       if (isGoldenRound) {
         newCard.isGolden = true;
@@ -47,15 +49,25 @@ export const useGameState = () => {
       setGameState((prev) => ({
         ...prev,
         isFlipping: true,
-        currentCard: newCard,
+        currentCard: null, // Don't show card data yet
         gameResult: null,
         showResult: false,
         isGoldenRound,
         bet: fixedBet,
       }));
 
+      // Show the card data after a short delay so the flip starts with the back
       setTimeout(() => {
-        const won = newCard.color === choice;
+        setGameState((prev) => ({
+          ...prev,
+          currentCard: newCard,
+        }));
+      }, 400); // Show card after flip animation starts
+
+      setTimeout(() => {
+        const won = choice === 'red' || choice === 'black' 
+          ? newCard.color === choice 
+          : newCard.suit === choice;
         const reward = won && isGoldenRound ? fixedBet * 2 : fixedBet;
         const newConsecutiveWins = won ? gameState.consecutiveWins + 1 : 0;
         const gameResult = won
@@ -71,17 +83,24 @@ export const useGameState = () => {
           timestamp: Date.now(),
         };
 
-        setGameState((prev) => ({
-          ...prev,
-          isFlipping: false,
-          gameResult,
-          showResult: true,
-          chips: won ? prev.chips + reward : prev.chips - fixedBet,
-          totalWinnings: won ? prev.totalWinnings + reward : prev.totalWinnings,
-          consecutiveWins: newConsecutiveWins,
-          isGoldenRound: false,
-          cardHistory: [historyEntry, ...prev.cardHistory.slice(0, 4)], // Keep last 5
-        }));
+        setGameState((prev) => {
+          const newCashoutWins = won ? prev.cashoutWins + 1 : prev.cashoutWins;
+          const shouldResetCashout = newCashoutWins > 5;
+
+          return {
+            ...prev,
+            isFlipping: false,
+            gameResult,
+            showResult: true,
+            chips: won ? prev.chips : prev.chips - fixedBet, // Only deduct on loss
+            pendingWinnings: won ? prev.pendingWinnings + reward : prev.pendingWinnings, // Add wins to pending
+            totalWinnings: won ? prev.totalWinnings + reward : prev.totalWinnings, // Keep total for tracking
+            consecutiveWins: newConsecutiveWins,
+            cashoutWins: shouldResetCashout ? 1 : newCashoutWins, // Reset to 1 if over 5, otherwise use newCashoutWins
+            isGoldenRound: false,
+            cardHistory: [historyEntry, ...prev.cardHistory.slice(0, 4)], // Keep last 5
+          };
+        });
 
         // Removed automatic timeout - now handled by close button or auto-dismiss
       }, 1500);
@@ -101,23 +120,28 @@ export const useGameState = () => {
   }, []);
 
   const closeResult = useCallback(() => {
-    // Start card disappearing animation
+    // Just clear the result and card immediately, no zoom out animation
     setGameState((prev) => ({
       ...prev,
       showResult: false,
       gameResult: null,
-      isCardDisappearing: true,
+      currentCard: null,
+      isCardDisappearing: false,
     }));
+  }, []);
 
-    // Remove card after animation completes
-    setTimeout(() => {
+  const cashOut = useCallback(() => {
+    if (gameState.cashoutWins >= 5) {
+      const cashoutAmount = gameState.cashoutWins * 200; // 200 chips per win
       setGameState((prev) => ({
         ...prev,
-        currentCard: null,
-        isCardDisappearing: false,
+        chips: prev.chips + cashoutAmount + prev.pendingWinnings, // Cash out both
+        cashoutWins: 0,
+        pendingWinnings: 0, // Clear pending winnings too
       }));
-    }, 600);
-  }, []);
+    }
+  }, [gameState.cashoutWins, gameState.pendingWinnings]);
+
 
   return {
     gameState,
@@ -126,5 +150,6 @@ export const useGameState = () => {
     playGame,
     resetGame,
     closeResult,
+    cashOut,
   };
 };

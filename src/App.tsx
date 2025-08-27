@@ -7,7 +7,7 @@ import RulesModal from "./components/RulesModal";
 import "./App.css";
 
 function App() {
-  const { gameState, addChips, playGame, closeResult } = useGameState();
+  const { gameState, addChips, playGame, closeResult, cashOut } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showChipAnimation, setShowChipAnimation] = useState(false);
@@ -26,17 +26,102 @@ function App() {
         <div className="game-title">
           <span className="title-icon">🎰</span>
           RED & BLACK
-          <span className="title-icon">🎰</span>
+          <button className="rules-button-title" onClick={() => setShowRules(true)}>
+            Rules
+          </button>
         </div>
         <button className="shop-button" onClick={() => setShowShop(true)}>
           🏪 SHOP
         </button>
       </div>
 
-      <div className="rules-section">
-        <button className="rules-button" onClick={() => setShowRules(true)}>
-          Rules
-        </button>
+      <div className="progress-section">
+        <div className="progress-container">
+          <div className="cashout-progress">
+            <div className="progress-label">Cashout Progress</div>
+            <div className="progress-bar-container">
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill" 
+                  style={{ width: `${(gameState.cashoutWins / 5) * 100}%` }}
+                ></div>
+              </div>
+              <span className="progress-text">{gameState.cashoutWins}/5</span>
+              {gameState.cashoutWins >= 5 && (
+                <button 
+                  className="cashout-button" 
+                  onClick={cashOut}
+                >
+                  Cash Out
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="bonus-progress">
+            <div className="progress-label">Bonus Progress</div>
+            <div className="bonus-slider-wrapper">
+              <div className="bonus-slider-track">
+                
+                {/* Golden card backgrounds for 3,6,12 */}
+                {[3, 6, 12].map(milestone => {
+                  const isAchieved = gameState.consecutiveWins >= milestone;
+                  const justReached = gameState.consecutiveWins === milestone && gameState.isGoldenRound;
+                  const almostReached = gameState.consecutiveWins === milestone - 1;
+                  const isWinning = gameState.gameResult === 'win' || gameState.gameResult === 'golden-win';
+                  
+                  return (
+                    <div 
+                      key={milestone}
+                      className={`golden-card-bg ${isAchieved ? 'achieved' : ''}`}
+                      style={{ left: `${((milestone - 1) / 19) * 100}%` }}
+                    >
+                      <div className={`mini-card ${justReached && gameState.showResult ? 'milestone-reached' : ''} ${isAchieved && isWinning && gameState.showResult ? 'super-gold' : ''} ${almostReached ? 'almost-reached' : ''}`}>
+                        <span className="milestone-num">{milestone}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                {/* Golden multiplier backgrounds for 15,20 */}
+                {[{num: 15, mult: 'X15'}, {num: 20, mult: 'X20'}].map(({num, mult}) => {
+                  const isAchieved = gameState.consecutiveWins >= num;
+                  const justReached = gameState.consecutiveWins === num && gameState.isGoldenRound;
+                  const almostReached = gameState.consecutiveWins === num - 1;
+                  const isWinning = gameState.gameResult === 'win' || gameState.gameResult === 'golden-win';
+                  
+                  return (
+                    <div 
+                      key={num}
+                      className={`golden-multiplier-bg ${isAchieved ? 'achieved' : ''}`}
+                      style={{ left: `${((num - 1) / 19) * 100}%` }}
+                    >
+                      <div className={`multiplier-card ${justReached && gameState.showResult ? 'milestone-reached' : ''} ${isAchieved && isWinning && gameState.showResult ? 'super-gold' : ''} ${almostReached ? 'almost-reached' : ''}`}>
+                        <span className="milestone-num">{num}</span>
+                        <span className="multiplier-text">{mult}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                {/* Small dots for other positions */}
+                {Array.from({ length: 20 }, (_, i) => i + 1)
+                  .filter(num => ![3, 6, 12, 15, 20].includes(num))
+                  .map(num => {
+                    const isLitUp = gameState.consecutiveWins >= num;
+                    
+                    return (
+                      <div 
+                        key={num}
+                        className={`bonus-dot ${isLitUp ? 'achieved' : ''}`}
+                        style={{ left: `${((num - 1) / 19) * 100}%` }}
+                      ></div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ---- MAIN CONTENT ---- */}
@@ -76,7 +161,7 @@ function App() {
           <div className="red-buttons">
             <button
               className="suit-button red-button hearts"
-              onClick={() => playGame("red")}
+              onClick={() => playGame("hearts")}
               disabled={
                 gameState.chips < 100 ||
                 gameState.isFlipping ||
@@ -87,7 +172,7 @@ function App() {
             </button>
             <button
               className="suit-button red-button diamonds"
-              onClick={() => playGame("red")}
+              onClick={() => playGame("diamonds")}
               disabled={
                 gameState.chips < 100 ||
                 gameState.isFlipping ||
@@ -146,6 +231,7 @@ function App() {
               showBack={true}
               isPullingOut={false}
               isDisappearing={gameState.isCardDisappearing}
+              hasGoldenBack={[2, 5, 11, 14, 19].includes(gameState.consecutiveWins)}
             />
           </div>
         </div>
@@ -155,8 +241,8 @@ function App() {
           <div className="win-amount">
             <div className="history-header">WIN AMOUNT</div>
             <div className="suit-gamble-info">
-              <span>Total Winnings</span>
-              <span className="win-value">🪙{gameState.totalWinnings}</span>
+              <span>Pending Winnings</span>
+              <span className="win-value">🪙{gameState.pendingWinnings}</span>
             </div>
           </div>
 
@@ -175,7 +261,7 @@ function App() {
           <div className="black-buttons">
             <button
               className="suit-button black-button clubs"
-              onClick={() => playGame("black")}
+              onClick={() => playGame("clubs")}
               disabled={
                 gameState.chips < 100 ||
                 gameState.isFlipping ||
@@ -186,7 +272,7 @@ function App() {
             </button>
             <button
               className="suit-button black-button spades"
-              onClick={() => playGame("black")}
+              onClick={() => playGame("spades")}
               disabled={
                 gameState.chips < 100 ||
                 gameState.isFlipping ||

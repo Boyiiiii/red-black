@@ -65,7 +65,7 @@
 }
 
 .card-container:not(.flipping) .card {
-  transform: rotateY(0deg);
+  transform: rotateY(0deg); /* Show back by default */
 }
 
 @keyframes flipInPlace {
@@ -129,6 +129,31 @@
   background: linear-gradient(135deg, #8B5A96, #C06C84);
   border: 3px solid #D4A5D8;
   transform: rotateY(0deg);
+}
+
+.card-back.golden-back {
+  background: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
+  border: 3px solid #FFD700;
+  box-shadow: 
+    0 8px 25px rgba(255, 215, 0, 0.4),
+    0 0 30px rgba(255, 215, 0, 0.3),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  animation: goldenBackGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes goldenBackGlow {
+  0% {
+    box-shadow: 
+      0 8px 25px rgba(255, 215, 0, 0.4),
+      0 0 30px rgba(255, 215, 0, 0.3),
+      inset 0 0 20px rgba(255, 215, 0, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 10px 35px rgba(255, 215, 0, 0.6),
+      0 0 50px rgba(255, 215, 0, 0.5),
+      inset 0 0 30px rgba(255, 215, 0, 0.2);
+  }
 }
 
 .card-content {

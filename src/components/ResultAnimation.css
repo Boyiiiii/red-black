@@ -39,7 +39,7 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.close-button {
+.x-button {
   background: none;
   border: none;
   color: #ffd700;
@@ -59,9 +59,29 @@
   pointer-events: auto;
 }
 
-.close-button:hover {
+.x-button:hover {
   background: rgba(255, 215, 0, 0.2);
   transform: scale(1.1);
+}
+
+.close-button {
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 8px;
+  margin-top: 24px;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.close-button:hover {
+  background: rgba(255, 215, 0, 0.4);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
 @keyframes resultPop {
@@ -116,11 +136,18 @@
     margin-bottom: 8px;
   }
 
+  .x-button {
+    font-size: 24px;
+    width: 28px;
+    height: 28px;
+    top: 4px;
+    right: 4px;
+  }
+
   .close-button {
     margin-top: 12px;
-    padding: 8px 24px;
-    font-size: 12px;
-    width: 80px;
+    padding: 8px 16px;
+    font-size: 14px;
   }
 }
 

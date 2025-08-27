@@ -45,8 +45,8 @@ const ResultAnimation: React.FC<ResultAnimationProps> = ({ result, show, betAmou
         <div className="result-amount">
           {result === 'golden-win' ? `+${betAmount * 2}` : result === 'win' ? `+${betAmount}` : `-${betAmount}`} chips
         </div>
-        <button className="close-button" onClick={handleClose}>
-          Close
+        <button className="x-button" onClick={handleClose}>
+          ×
         </button>
         {(result === 'win' || result === 'golden-win') && (
           <div className="confetti">
