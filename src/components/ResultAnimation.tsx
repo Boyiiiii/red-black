@@ -14,7 +14,7 @@ const ResultAnimation: React.FC<ResultAnimationProps> = ({ result, show, betAmou
 
     const timer = setTimeout(() => {
       onClose();
-    }, 2000);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, [show, onClose]);

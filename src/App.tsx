@@ -116,43 +116,69 @@ function App() {
           <div className="footprint-display">
             <div className="footprint-header">
               <div className="pending-prize-info">
-                Pending Prize: {gameState.pendingPrize.toFixed(2)} {gameState.pendingPrizeCurrency === "gold" ? "GC" : "SC"}
+                Pending Prize: {gameState.pendingPrize.toFixed(2)}{" "}
+                {gameState.pendingPrizeCurrency === "gold" ? "GC" : "SC"}
               </div>
               <div className="bonus-info">
                 {gameState.canCashout && gameState.cashoutTimer ? (
                   <div className="cashout-info">
-                    <span className="cashout-timer-small">{gameState.cashoutTimer}s</span>
+                    <span className="cashout-timer-small">
+                      {gameState.cashoutTimer}s
+                    </span>
                     <button
                       className="cashout-button-small"
                       onClick={() => cashOut(gameState.pendingPrizeCurrency)}
                     >
-                      Cashout {(gameState.pendingPrize * gameState.cashoutBonus).toFixed(2)} {gameState.pendingPrizeCurrency === "gold" ? "GC" : "SC"}
+                      Cashout{" "}
+                      {(
+                        gameState.pendingPrize * gameState.cashoutBonus
+                      ).toFixed(2)}{" "}
+                      {gameState.pendingPrizeCurrency === "gold" ? "GC" : "SC"}
                     </button>
                   </div>
                 ) : (
-                  <span>Next Bonus: {
-                    gameState.consecutiveWins < 3 ? "1.1x @ 3 wins" :
-                    gameState.consecutiveWins < 6 ? "1.3x @ 6 wins" :
-                    gameState.consecutiveWins < 9 ? "1.6x @ 9 wins" :
-                    gameState.consecutiveWins < 12 ? "2.0x @ 12 wins" :
-                    gameState.consecutiveWins < 15 ? "3.0x @ 15 wins" :
-                    "Max reached!"
-                  }</span>
+                  <span>
+                    Next Bonus:{" "}
+                    {gameState.consecutiveWins < 3
+                      ? "2.0x @ 3 wins"
+                      : gameState.consecutiveWins < 6
+                      ? "4.0x @ 6 wins"
+                      : gameState.consecutiveWins < 9
+                      ? "8.0x @ 9 wins"
+                      : gameState.consecutiveWins < 12
+                      ? "15.0x @ 12 wins"
+                      : gameState.consecutiveWins < 15
+                      ? "30.0x @ 15 wins"
+                      : "Max reached!"}
+                  </span>
                 )}
               </div>
             </div>
-            
+
             <div className="footprint-trail">
               {Array.from({ length: 15 }, (_, i) => {
                 const position = i + 1;
                 const isActive = position <= gameState.consecutiveWins;
                 const isBonusStep = [3, 6, 9, 12, 15].includes(position);
-                const bonusMultiplier = position === 3 ? 1.1 : position === 6 ? 1.3 : position === 9 ? 1.6 : position === 12 ? 2.0 : position === 15 ? 3.0 : 1.0;
-                
+                const bonusMultiplier =
+                  position === 3
+                    ? 2.0
+                    : position === 6
+                    ? 4.0
+                    : position === 9
+                    ? 8.0
+                    : position === 12
+                    ? 15.0
+                    : position === 15
+                    ? 30.0
+                    : 1.0;
+
                 return (
-                  <div 
-                    key={position} 
-                    className={`footprint ${isActive ? 'active' : ''} ${isBonusStep ? 'bonus-step' : ''}`}
+                  <div
+                    key={position}
+                    className={`footprint ${isActive ? "active" : ""} ${
+                      isBonusStep ? "bonus-step" : ""
+                    }`}
                   >
                     <div className="footprint-number">{position}</div>
                     {isBonusStep && (

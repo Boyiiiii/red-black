@@ -104,7 +104,8 @@ export const useGameState = () => {
         gameState.bettingStats,
         gameState.consecutiveWins,
         gameState.consecutiveWins,
-        isNewPlayer
+        isNewPlayer,
+        gameState.pendingPrizeCurrency
       );
 
       if (isGoldenRound) {
@@ -127,7 +128,7 @@ export const useGameState = () => {
           ...prev,
           currentCard: newCard,
         }));
-      }, 400); // Show card after flip animation starts
+      }, 200); // Show card after flip animation starts (faster)
 
       setTimeout(() => {
         const won =
@@ -135,7 +136,19 @@ export const useGameState = () => {
             ? newCard.color === choice
             : newCard.suit === choice;
 
-        const reward = won && isGoldenRound ? betAmount * 2 : betAmount;
+        // Different rewards for color vs suit bets
+        const isColorBet = choice === "red" || choice === "black";
+        let baseReward = betAmount;
+        
+        if (won) {
+          if (isColorBet) {
+            baseReward = betAmount * 1; // Color bets: 1:1 profit (bet 100, win 100 profit)
+          } else {
+            baseReward = betAmount * 3; // Suit bets: 3:1 profit (bet 100, win 300 profit)
+          }
+        }
+        
+        const reward = won && isGoldenRound ? baseReward * 2 : baseReward;
         const progressIncrease = won
           ? gameState.hasDoubleProgress
             ? 2
@@ -182,12 +195,12 @@ export const useGameState = () => {
             newCashoutTimer = CASHOUT_TIMER_SECONDS;
             newCanCashout = true;
             newPendingPrize += betAmount;
-            // Set bonus based on milestone
-            if (newConsecutiveWins === 3) newCashoutBonus = 1.1;
-            else if (newConsecutiveWins === 6) newCashoutBonus = 1.3;
-            else if (newConsecutiveWins === 9) newCashoutBonus = 1.6;
-            else if (newConsecutiveWins === 12) newCashoutBonus = 2.0;
-            else if (newConsecutiveWins === 15) newCashoutBonus = 3.0;
+            // Set bonus based on milestone - much more attractive
+            if (newConsecutiveWins === 3) newCashoutBonus = 2.0;
+            else if (newConsecutiveWins === 6) newCashoutBonus = 4.0;
+            else if (newConsecutiveWins === 9) newCashoutBonus = 8.0;
+            else if (newConsecutiveWins === 12) newCashoutBonus = 15.0;
+            else if (newConsecutiveWins === 15) newCashoutBonus = 30.0;
           } else if (won) {
             // Regular win - just add to pending, no cashout opportunity
             newPendingPrize += betAmount;
@@ -225,7 +238,7 @@ export const useGameState = () => {
         });
 
         // Wait for card flip animation to complete before showing result
-      }, 1400);
+      }, 1000); // Give time to see the card before result
     },
     [
       gameState.goldCoins,

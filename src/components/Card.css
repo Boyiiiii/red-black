@@ -60,7 +60,7 @@
 }
 
 .card-container.flipping .card {
-  animation: flipInPlace 1.2s ease-in-out forwards;
+  animation: flipInPlace 0.6s ease-in-out forwards;
   transition: none;
 }
 
