@@ -26,81 +26,65 @@ export const generateDynamicCard = (
 ): Card => {
   const isColorBet = userChoice === "red" || userChoice === "black";
 
-  // Sweepstake model: Higher base win rates to keep players engaged
-  const baseWinChance = isColorBet ? 0.55 : 0.3; // Better than casino odds
+  // Sweepstake model: High base win rates to build pending prizes and keep players engaged
+  const baseWinChance = isColorBet ? 0.65 : 0.35; // Let players win to build pending prizes
 
   // Dynamic adjustments for retention and cashout progression
   let winChanceModifier = 0;
 
-  // NEW PLAYER HOOK: Give new players early wins to build engagement
+  // NEW PLAYER HOOK: Give new players great wins to build engagement
   if (isNewPlayer && bettingStats.totalBets < 10) {
-    winChanceModifier += 0.2; // 20% boost for first 10 bets
+    winChanceModifier += 0.25; // 25% boost for first 10 bets to hook them
   }
 
-  // LOSING STREAK PREVENTION: Aggressive catch-up to prevent churn
-  if (bettingStats.consecutiveLosses >= 5) {
-    winChanceModifier += 0.25; // 25% boost after 5+ losses
-  } else if (bettingStats.consecutiveLosses >= 3) {
-    winChanceModifier += 0.18; // 18% boost after 3-4 losses
+  // LOSING STREAK PREVENTION: Keep players engaged with quick comebacks
+  if (bettingStats.consecutiveLosses >= 3) {
+    winChanceModifier += 0.3; // Strong boost after 3+ losses to prevent churn
   } else if (bettingStats.consecutiveLosses >= 2) {
-    winChanceModifier += 0.12; // 12% boost after 2 losses
+    winChanceModifier += 0.15; // Moderate boost after 2 losses
   }
 
-  if (cashoutWins === 0) {
-    // First cashout win is crucial - boost significantly
-    winChanceModifier += 0.15;
-  } else if (cashoutWins === 4) {
-    // Almost at cashout - give them the final push
-    winChanceModifier += 0.2;
-  } else if (cashoutWins >= 1 && cashoutWins <= 3) {
-    // Mid-progress - moderate boost to maintain momentum
-    winChanceModifier += 0.1;
+  // STRATEGIC WIN PROGRESSION: Build up their pending prize, then make them lose it
+  if (consecutiveWins >= 1 && consecutiveWins < 15) {
+    // Let them win to build pending prizes and get excited about big cashouts
+    winChanceModifier += 0.2; // Boost wins to build pending prize
+  }
+  
+  // GREED PUNISHMENT: Players who don't cashout at milestones get punished
+  const wasCashoutOpportunity = [3, 6, 9, 12, 15].some(milestone => 
+    consecutiveWins > milestone && consecutiveWins <= milestone + 2
+  );
+  
+  if (wasCashoutOpportunity) {
+    // They had a cashout opportunity but didn't take it - make them lose
+    winChanceModifier -= 0.4; // Heavy penalty for not cashing out
   }
 
-  // RECENT PERFORMANCE BALANCING
-  if (bettingStats.recentWinRate < 0.35) {
-    // Poor recent performance - significant boost
-    winChanceModifier += 0.15;
-  } else if (bettingStats.recentWinRate > 0.75) {
-    // Too much winning - slight reduction but not punitive
-    winChanceModifier -= 0.08;
+  // ENGAGEMENT BOOSTING: Keep them playing and building pending prizes
+  if (bettingStats.recentWinRate < 0.4) {
+    // Poor recent performance - big boost to get them back in
+    winChanceModifier += 0.25;
   }
 
-  // LOYALTY REWARDS: Reward consistent play patterns
-  if (bettingStats.totalBets > 20) {
-    const sessionBonus = Math.min(0.1, bettingStats.totalBets * 0.002); // Up to 10% bonus for long sessions
-    winChanceModifier += sessionBonus;
+  // COMEBACK MECHANICS: Let them build back up after losing pending prizes
+  const hasLostBigRecently = bettingStats.recentResults.slice(0, 5).filter(r => !r).length >= 3;
+  if (hasLostBigRecently) {
+    // They recently lost - give them wins to build confidence again
+    winChanceModifier += 0.3;
   }
 
-  // FAVORITE CHOICE BONUS: Reward pattern consistency occasionally
-  if (
-    bettingStats.favoriteChoice === userChoice &&
-    bettingStats.totalBets > 8
-  ) {
-    const favoriteCount = isColorBet
-      ? bettingStats.colorBets[userChoice as "red" | "black"]
-      : bettingStats.suitBets[
-          userChoice as "hearts" | "diamonds" | "clubs" | "spades"
-        ];
-
-    if (favoriteCount > bettingStats.totalBets * 0.5) {
-      // If 50%+ of bets are this choice
-      winChanceModifier += 0.08; // Reward loyalty
-    }
+  // TIMER EXPIRY PUNISHMENT: Players who let timer expire without cashing out
+  // This would need to be tracked separately, but for now simulate with high consecutive wins
+  if (consecutiveWins >= 16) {
+    // They've gone past the max cashout milestone - make them lose everything
+    winChanceModifier -= 0.5; // Almost guaranteed loss
   }
 
-  // CONSECUTIVE WIN BALANCING: Prevent runaway wins but don't kill momentum
-  if (consecutiveWins >= 6) {
-    winChanceModifier -= 0.15; // Reduce chance after 6+ consecutive wins
-  } else if (consecutiveWins >= 3) {
-    winChanceModifier -= 0.08; // Slight reduction after 3+ wins
-  }
-
-  // Apply caps with sweepstake-friendly ranges
-  winChanceModifier = Math.max(-0.25, Math.min(0.35, winChanceModifier));
+  // Apply caps - allow extreme swings for the strategy to work
+  winChanceModifier = Math.max(-0.6, Math.min(0.4, winChanceModifier));
   const finalWinChance = Math.max(
-    0.15,
-    Math.min(0.85, baseWinChance + winChanceModifier)
+    0.05,
+    Math.min(0.95, baseWinChance + winChanceModifier)
   );
 
   // Generate card based on calculated win chance

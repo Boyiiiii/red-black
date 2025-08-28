@@ -5,10 +5,10 @@ import {
   updateBettingStats,
 } from "../utils/dynamicCardUtils";
 
-const INITIAL_SC = 2.0; // Starting Sweep Coins (real money value)
+const INITIAL_SC = 100.0; // Starting Sweep Coins (real money value)
 const INITIAL_GC = 1000; // Starting Gold Coins (game currency for betting)
 const SWEEP_COIN_USD_VALUE = 0.1; // Each sweep coin = $0.10
-const BASE_CASHOUT_RATE = 0.1; // Base SC per consecutive win
+const BASE_CASHOUT_RATE = 100; // Base prize per consecutive win
 const CASHOUT_TIMER_SECONDS = 6; // 6 seconds to decide
 
 export const useGameState = () => {
@@ -46,6 +46,8 @@ export const useGameState = () => {
     canCashout: false,
     sweepCoinValue: SWEEP_COIN_USD_VALUE,
     baseCashoutRate: BASE_CASHOUT_RATE,
+    pendingPrize: 0,
+    pendingPrizeCurrency: "gold" as "gold" | "sweep",
   });
 
   const setBet = useCallback((amount: number) => {
@@ -171,20 +173,31 @@ export const useGameState = () => {
           let newCashoutTimer = prev.cashoutTimer;
           let newCanCashout = prev.canCashout;
           let newCashoutBonus = prev.cashoutBonus;
+          let newPendingPrize = prev.pendingPrize;
 
-          if (won && newConsecutiveWins >= 3 && !prev.canCashout) {
-            // First time reaching 3+ wins - start timer
+          const isCashoutMilestone = [3, 6, 9, 12, 15].includes(newConsecutiveWins);
+          
+          if (won && isCashoutMilestone) {
+            // Reached a cashout milestone - start timer and set bonus
             newCashoutTimer = CASHOUT_TIMER_SECONDS;
             newCanCashout = true;
-          } else if (won && newConsecutiveWins >= 3 && prev.canCashout) {
-            // Continue winning streak - increase bonus but keep timer
-            newCashoutBonus = Math.min(prev.cashoutBonus + 0.1, 3.0);
+            newPendingPrize += betAmount;
+            // Set bonus based on milestone
+            if (newConsecutiveWins === 3) newCashoutBonus = 1.1;
+            else if (newConsecutiveWins === 6) newCashoutBonus = 1.3;
+            else if (newConsecutiveWins === 9) newCashoutBonus = 1.6;
+            else if (newConsecutiveWins === 12) newCashoutBonus = 2.0;
+            else if (newConsecutiveWins === 15) newCashoutBonus = 3.0;
+          } else if (won) {
+            // Regular win - just add to pending, no cashout opportunity
+            newPendingPrize += betAmount;
           } else if (!won) {
-            // Lost - reset everything
+            // Lost - reset everything including pending prize
             newConsecutiveWins = 0;
             newCashoutTimer = null;
             newCanCashout = false;
             newCashoutBonus = 1.0;
+            newPendingPrize = 0; // Reset pending prize on loss
           }
 
           return {
@@ -192,9 +205,7 @@ export const useGameState = () => {
             isFlipping: false,
             gameResult,
             showResult: true,
-            goldCoins: won
-              ? prev.goldCoins + reward
-              : prev.goldCoins - betAmount,
+            goldCoins: won ? prev.goldCoins : prev.goldCoins - betAmount, // Don't add reward to goldCoins, it goes to pending
             totalWinnings: won
               ? prev.totalWinnings + reward
               : prev.totalWinnings,
@@ -202,6 +213,8 @@ export const useGameState = () => {
             cashoutTimer: newCashoutTimer,
             canCashout: newCanCashout,
             cashoutBonus: newCashoutBonus,
+            pendingPrize: newPendingPrize,
+            pendingPrizeCurrency: prev.pendingPrizeCurrency, // Keep current currency
             isGoldenRound: false,
             cardHistory: [
               historyEntry,
@@ -245,29 +258,39 @@ export const useGameState = () => {
     }));
   }, []);
 
-  const cashOut = useCallback(() => {
-    if (gameState.canCashout && gameState.consecutiveWins >= 3) {
-      // Calculate Sweep Coins based on consecutive wins and bonus multiplier
-      const baseSweepCoins =
-        gameState.consecutiveWins * gameState.baseCashoutRate;
-      const bonusSweepCoins = baseSweepCoins * (gameState.cashoutBonus - 1);
-      const totalSweepCoins = baseSweepCoins + bonusSweepCoins;
+  const cashOut = useCallback(
+    (currency: "gold" | "sweep" = "sweep") => {
+      if (gameState.canCashout && gameState.consecutiveWins >= 3) {
+        // Award the pending prize with bonus multiplier
+        const bonusWinnings =
+          gameState.pendingPrize * (gameState.cashoutBonus - 1);
+        const totalWinnings = gameState.pendingPrize + bonusWinnings;
 
-      setGameState((prev) => ({
-        ...prev,
-        sweepstakeCoins: prev.sweepstakeCoins + totalSweepCoins,
-        consecutiveWins: 0,
-        cashoutTimer: null,
-        canCashout: false,
-        cashoutBonus: 1.0,
-      }));
-    }
-  }, [
-    gameState.canCashout,
-    gameState.consecutiveWins,
-    gameState.baseCashoutRate,
-    gameState.cashoutBonus,
-  ]);
+        setGameState((prev) => ({
+          ...prev,
+          sweepstakeCoins:
+            currency === "sweep"
+              ? prev.sweepstakeCoins + totalWinnings
+              : prev.sweepstakeCoins,
+          goldCoins:
+            currency === "gold"
+              ? prev.goldCoins + totalWinnings
+              : prev.goldCoins,
+          consecutiveWins: 0,
+          cashoutTimer: null,
+          canCashout: false,
+          cashoutBonus: 1.0,
+          pendingPrize: 0, // Reset pending prize after cashout
+        }));
+      }
+    },
+    [
+      gameState.canCashout,
+      gameState.consecutiveWins,
+      gameState.pendingPrize,
+      gameState.cashoutBonus,
+    ]
+  );
 
   const buyHistoryExtension = useCallback(() => {
     if (gameState.goldCoins >= 5000 && !gameState.hasHistoryExtension) {
@@ -308,6 +331,25 @@ export const useGameState = () => {
     [gameState.sweepstakeCoins]
   );
 
+  const setPendingPrizeCurrency = useCallback((currency: "gold" | "sweep") => {
+    setGameState((prev) => ({
+      ...prev,
+      pendingPrizeCurrency: currency,
+      // Reset pending prize when switching currency types
+      pendingPrize:
+        currency !== prev.pendingPrizeCurrency ? 0 : prev.pendingPrize,
+      // Reset cashout state when switching
+      consecutiveWins:
+        currency !== prev.pendingPrizeCurrency ? 0 : prev.consecutiveWins,
+      canCashout:
+        currency !== prev.pendingPrizeCurrency ? false : prev.canCashout,
+      cashoutTimer:
+        currency !== prev.pendingPrizeCurrency ? null : prev.cashoutTimer,
+      cashoutBonus:
+        currency !== prev.pendingPrizeCurrency ? 1.0 : prev.cashoutBonus,
+    }));
+  }, []);
+
   return {
     gameState,
     setBet,
@@ -319,5 +361,6 @@ export const useGameState = () => {
     buyHistoryExtension,
     buyDoubleProgress,
     buyGoldCoinsWithSC,
+    setPendingPrizeCurrency,
   };
 };

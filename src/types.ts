@@ -46,7 +46,9 @@ export interface GameState {
   cashoutTimer: number | null; // Countdown timer in seconds
   canCashout: boolean; // Whether cashout is available
   sweepCoinValue: number; // USD value per sweep coin
-  baseCashoutRate: number; // Base SC earned per consecutive win
+  baseCashoutRate: number; // Base prize earned per consecutive win
+  pendingPrize: number; // Current pending prize amount
+  pendingPrizeCurrency: 'gold' | 'sweep'; // Currency type of pending prize
 }
 
 export type BetChoice = 'red' | 'black' | 'hearts' | 'diamonds' | 'clubs' | 'spades';

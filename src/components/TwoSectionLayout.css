@@ -59,15 +59,18 @@
 }
 
 .rules-button {
-  padding: 3px 6px;
+  padding: 6px 12px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 10px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  height: 32px;
+  display: flex;
+  align-items: center;
 }
 
 .rules-button:hover {
@@ -78,16 +81,19 @@
 }
 
 .shop-button {
-  padding: 3px 6px;
+  padding: 6px 12px;
   background: linear-gradient(135deg, #64b5f6, #42a5f5);
   border: none;
   border-radius: 8px;
   color: white;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
+  height: 32px;
+  display: flex;
+  align-items: center;
 }
 
 .shop-button:hover {
@@ -228,6 +234,139 @@
   font-size: 11px;
   color: #ffd700;
   font-weight: bold;
+}
+
+/* Footprint Display Styles */
+.footprint-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.footprint-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 16px;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.pending-prize-info {
+  font-size: 12px;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.bonus-info {
+  font-size: 12px;
+  color: #64b5f6;
+  font-weight: bold;
+}
+
+.footprint-trail {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 500px;
+}
+
+.footprint {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.footprint.active {
+  background: rgba(76, 175, 80, 0.3);
+  border-color: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.footprint.bonus-step {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
+.footprint.active.bonus-step {
+  background: rgba(255, 215, 0, 0.4);
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+.footprint-number {
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+}
+
+.bonus-multiplier {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ffd700;
+  color: #1a237e;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.cashout-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cashout-timer-small {
+  font-size: 12px;
+  color: #ff6b6b;
+  font-weight: bold;
+  background: rgba(255, 107, 107, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #ff6b6b;
+  animation: timerPulse 1s ease-in-out infinite alternate;
+}
+
+.cashout-button-small {
+  font-size: 10px;
+  color: #1a237e;
+  background: linear-gradient(135deg, #ffd700, #ffecb3);
+  border: 2px solid #ffd700;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+}
+
+.cashout-button-small:hover {
+  background: linear-gradient(135deg, #ffecb3, #ffd700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4);
+}
+
+.cashout-button-small:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(255, 215, 0, 0.3);
 }
 
 .cashout-controls {
@@ -533,28 +672,152 @@
   border-radius: 2px;
 }
 
-/* Bet Section Header - New layout */
+/* Bet Section Header - Currency Selector Layout */
 .bet-section-header {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.currency-selector-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.currency-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+.currency-selector.gold-selected {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #000;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  border-color: rgba(255, 215, 0, 0.6);
+}
+
+.currency-selector.gold-selected:hover:not(.disabled) {
+  background: linear-gradient(135deg, #ffed4e, #ffd700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.currency-selector.sweep-selected {
+  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(100, 181, 246, 0.3);
+  border-color: rgba(100, 181, 246, 0.6);
+}
+
+.currency-selector.sweep-selected:hover {
+  background: linear-gradient(135deg, #42a5f5, #64b5f6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(100, 181, 246, 0.4);
+}
+
+.currency-selector.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.currency-type-with-balance {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.currency-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  margin-top: 4px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.currency-option {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.currency-option:last-child {
+  border-bottom: none;
+}
+
+.currency-option:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.currency-option.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffd700;
+}
+
+.currency-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #ff6b6b;
+}
+
+.insufficient-badge {
+  font-size: 8px;
+  background: #ff6b6b;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+/* Game Title and Actions - Combined Row */
+.game-title-actions-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 0;
+  min-height: 32px;
 }
 
-/* Game Title Section - Centered */
-.game-title-section {
-  text-align: center;
-  margin-bottom: 8px;
+.game-title-actions-row .game-title {
+  margin: 0;
+  flex: 1;
+  text-align: left;
 }
 
-/* Action Buttons Row */
-.action-buttons-row {
+.game-title-actions-row .action-buttons {
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
 }
 
 .game-title {
@@ -633,6 +896,7 @@
   align-items: center;
   margin-bottom: 10px;
 }
+
 
 /* Bet Slider Container */
 .bet-slider-container {
@@ -1496,13 +1760,39 @@
   }
 
   .bet-section-header {
-    margin-bottom: 1px;
-    padding-bottom: 0px;
-    min-height: 18px;
-    height: 18px;
-    gap: 3px;
+    margin-bottom: 6px !important;
+    padding-bottom: 4px !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    overflow: hidden;
+  }
+
+  .currency-selector {
+    padding: 3px 6px !important;
+    font-size: 6px !important;
+    border-radius: 8px !important;
+    min-height: 12px !important;
+  }
+
+  .currency-type-with-balance {
+    gap: 1px !important;
+  }
+
+  .dropdown-arrow {
+    font-size: 4px !important;
+  }
+
+  .currency-dropdown {
+    margin-top: 2px !important;
+    border-radius: 6px !important;
+  }
+
+  .currency-option {
+    padding: 4px 6px !important;
+    font-size: 6px !important;
+  }
+
+  .insufficient-badge {
+    font-size: 5px !important;
+    padding: 1px 3px !important;
   }
 
   .game-title {
@@ -1510,20 +1800,27 @@
     margin-bottom: 2px !important;
   }
 
-  .game-title-section {
+  .game-title-actions-row {
     margin-bottom: 4px !important;
-    padding-bottom: 2px !important;
+    margin-top: 4px !important;
+    padding: 2px 0 !important;
+    min-height: 18px !important;
   }
 
-  .action-buttons-row {
-    margin-bottom: 6px !important;
+  .game-title-actions-row .game-title {
+    font-size: 10px !important;
+  }
+
+  .game-title-actions-row .action-buttons {
+    gap: 4px !important;
   }
 
   .rules-button,
   .shop-button {
-    padding: 4px 8px !important;
-    font-size: 10px !important;
-    min-height: 24px !important;
+    padding: 3px 6px !important;
+    font-size: 8px !important;
+    min-height: 18px !important;
+    height: 18px !important;
   }
 
   .bet-amount-section {
@@ -1554,6 +1851,7 @@
     padding: 4px 6px !important;
     min-height: 22px !important;
   }
+
 }
 
 /* Desktop/Tablet - Full Layout */
