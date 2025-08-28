@@ -1,16 +1,19 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import type { GameState, BetChoice, CardHistoryEntry, BettingStats } from "../types";
-import { generateDynamicCard, updateBettingStats } from "../utils/dynamicCardUtils";
+import type { GameState, BetChoice, CardHistoryEntry } from "../types";
+import {
+  generateDynamicCard,
+  updateBettingStats,
+} from "../utils/dynamicCardUtils";
 
 const INITIAL_SC = 1000; // Starting Sweepstake Coins
 const INITIAL_GC = 2.0; // Starting Gold Coins (for purchasing SC)
-const GOLD_COIN_USD_VALUE = 0.10; // Each gold coin = $0.10
+const GOLD_COIN_USD_VALUE = 0.1; // Each gold coin = $0.10
 const BASE_CASHOUT_RATE = 0.1; // Base GC per consecutive win
 const CASHOUT_TIMER_SECONDS = 6; // 6 seconds to decide
 
 export const useGameState = () => {
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const [gameState, setGameState] = useState<GameState>({
     sweepstakeCoins: INITIAL_SC,
     goldCoins: INITIAL_GC,
@@ -56,14 +59,14 @@ export const useGameState = () => {
   useEffect(() => {
     if (gameState.cashoutTimer !== null && gameState.cashoutTimer > 0) {
       timerRef.current = setTimeout(() => {
-        setGameState(prev => ({
+        setGameState((prev) => ({
           ...prev,
           cashoutTimer: prev.cashoutTimer! - 1,
         }));
       }, 1000);
     } else if (gameState.cashoutTimer === 0) {
       // Timer expired - lose cashout opportunity but keep the winning streak growing
-      setGameState(prev => ({
+      setGameState((prev) => ({
         ...prev,
         cashoutTimer: null,
         canCashout: false,
@@ -89,17 +92,19 @@ export const useGameState = () => {
     (choice: BetChoice, betAmount: number = 100) => {
       if (gameState.sweepstakeCoins < betAmount || gameState.isFlipping) return;
 
-      const isGoldenRound = [2, 5, 11, 14, 19].includes(gameState.consecutiveWins);
+      const isGoldenRound = [2, 5, 11, 14, 19].includes(
+        gameState.consecutiveWins
+      );
       const isNewPlayer = gameState.bettingStats.totalBets < 15; // Consider first 15 bets as new player
-      
+
       const newCard = generateDynamicCard(
-        choice, 
-        gameState.bettingStats, 
+        choice,
+        gameState.bettingStats,
         gameState.consecutiveWins,
         gameState.consecutiveWins,
         isNewPlayer
       );
-      
+
       if (isGoldenRound) {
         newCard.isGolden = true;
       }
@@ -123,14 +128,21 @@ export const useGameState = () => {
       }, 400); // Show card after flip animation starts
 
       setTimeout(() => {
-        const won = choice === 'red' || choice === 'black' 
-          ? newCard.color === choice 
-          : newCard.suit === choice;
-        
+        const won =
+          choice === "red" || choice === "black"
+            ? newCard.color === choice
+            : newCard.suit === choice;
+
         const reward = won && isGoldenRound ? betAmount * 2 : betAmount;
-        const progressIncrease = won ? (gameState.hasDoubleProgress ? 2 : 1) : 0;
-        let newConsecutiveWins = won ? gameState.consecutiveWins + progressIncrease : 0;
-        
+        const progressIncrease = won
+          ? gameState.hasDoubleProgress
+            ? 2
+            : 1
+          : 0;
+        let newConsecutiveWins = won
+          ? gameState.consecutiveWins + progressIncrease
+          : 0;
+
         const gameResult = won
           ? isGoldenRound
             ? "golden-win"
@@ -159,7 +171,7 @@ export const useGameState = () => {
           let newCashoutTimer = prev.cashoutTimer;
           let newCanCashout = prev.canCashout;
           let newCashoutBonus = prev.cashoutBonus;
-          
+
           if (won && newConsecutiveWins >= 3 && !prev.canCashout) {
             // First time reaching 3+ wins - start timer
             newCashoutTimer = CASHOUT_TIMER_SECONDS;
@@ -180,14 +192,21 @@ export const useGameState = () => {
             isFlipping: false,
             gameResult,
             showResult: true,
-            sweepstakeCoins: won ? prev.sweepstakeCoins + reward : prev.sweepstakeCoins - betAmount,
-            totalWinnings: won ? prev.totalWinnings + reward : prev.totalWinnings,
+            sweepstakeCoins: won
+              ? prev.sweepstakeCoins + reward
+              : prev.sweepstakeCoins - betAmount,
+            totalWinnings: won
+              ? prev.totalWinnings + reward
+              : prev.totalWinnings,
             consecutiveWins: newConsecutiveWins,
             cashoutTimer: newCashoutTimer,
             canCashout: newCanCashout,
             cashoutBonus: newCashoutBonus,
             isGoldenRound: false,
-            cardHistory: [historyEntry, ...prev.cardHistory.slice(0, prev.hasHistoryExtension ? 9 : 4)],
+            cardHistory: [
+              historyEntry,
+              ...prev.cardHistory.slice(0, prev.hasHistoryExtension ? 9 : 4),
+            ],
             bettingStats: updatedBettingStats,
           };
         });
@@ -195,7 +214,13 @@ export const useGameState = () => {
         // Wait for card flip animation to complete before showing result
       }, 1400);
     },
-    [gameState.sweepstakeCoins, gameState.isFlipping, gameState.consecutiveWins, gameState.bettingStats]
+    [
+      gameState.sweepstakeCoins,
+      gameState.isFlipping,
+      gameState.consecutiveWins,
+      gameState.bettingStats,
+      gameState.hasDoubleProgress,
+    ]
   );
 
   const resetGame = useCallback(() => {
@@ -223,10 +248,11 @@ export const useGameState = () => {
   const cashOut = useCallback(() => {
     if (gameState.canCashout && gameState.consecutiveWins >= 3) {
       // Calculate Gold Coins based on consecutive wins and bonus multiplier
-      const baseGoldCoins = gameState.consecutiveWins * gameState.baseCashoutRate;
+      const baseGoldCoins =
+        gameState.consecutiveWins * gameState.baseCashoutRate;
       const bonusGoldCoins = baseGoldCoins * (gameState.cashoutBonus - 1);
       const totalGoldCoins = baseGoldCoins + bonusGoldCoins;
-      
+
       setGameState((prev) => ({
         ...prev,
         goldCoins: prev.goldCoins + totalGoldCoins,
@@ -236,7 +262,12 @@ export const useGameState = () => {
         cashoutBonus: 1.0,
       }));
     }
-  }, [gameState.canCashout, gameState.consecutiveWins, gameState.baseCashoutRate, gameState.cashoutBonus]);
+  }, [
+    gameState.canCashout,
+    gameState.consecutiveWins,
+    gameState.baseCashoutRate,
+    gameState.cashoutBonus,
+  ]);
 
   const buyHistoryExtension = useCallback(() => {
     if (gameState.sweepstakeCoins >= 5000 && !gameState.hasHistoryExtension) {
@@ -262,18 +293,20 @@ export const useGameState = () => {
     return false;
   }, [gameState.sweepstakeCoins, gameState.hasDoubleProgress]);
 
-  const buySweepstakeCoinsWithGC = useCallback((scAmount: number, gcCost: number) => {
-    if (gameState.goldCoins >= gcCost) {
-      setGameState((prev) => ({
-        ...prev,
-        goldCoins: prev.goldCoins - gcCost,
-        sweepstakeCoins: prev.sweepstakeCoins + scAmount,
-      }));
-      return true;
-    }
-    return false;
-  }, [gameState.goldCoins]);
-
+  const buySweepstakeCoinsWithGC = useCallback(
+    (scAmount: number, gcCost: number) => {
+      if (gameState.goldCoins >= gcCost) {
+        setGameState((prev) => ({
+          ...prev,
+          goldCoins: prev.goldCoins - gcCost,
+          sweepstakeCoins: prev.sweepstakeCoins + scAmount,
+        }));
+        return true;
+      }
+      return false;
+    },
+    [gameState.goldCoins]
+  );
 
   return {
     gameState,

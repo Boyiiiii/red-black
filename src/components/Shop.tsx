@@ -26,10 +26,16 @@ const Shop: React.FC<ShopProps> = ({
   onBuyDoubleProgress,
   onBuySweepstakeCoinsWithGC,
 }) => {
-  const [activeTab, setActiveTab] = useState<'sweepstake' | 'properties'>('sweepstake');
+  const [activeTab, setActiveTab] = useState<"sweepstake" | "properties">(
+    "sweepstake"
+  );
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<{chips: number, price: number, gcCost?: number} | null>(null);
-  
+  const [selectedPackage, setSelectedPackage] = useState<{
+    chips: number;
+    price: number;
+    gcCost?: number;
+  } | null>(null);
+
   // PayPal packages (real money)
   const paypalPackages = [
     { chips: 1000, price: 1.99, popular: false },
@@ -37,19 +43,9 @@ const Shop: React.FC<ShopProps> = ({
     { chips: 5000, price: 6.99, popular: false },
   ];
 
-  // Gold Coin packages (use GC to buy SC)
-  const goldCoinPackages = [
-    { chips: 500, gcCost: 0.5, popular: false },
-    { chips: 1000, gcCost: 1.0, popular: true },
-    { chips: 2000, gcCost: 1.8, popular: false },
-  ];
-
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid = /Android/.test(navigator.userAgent);
-
-  const handleBuy = (pkg: {chips: number, price: number}) => {
+  const handleBuy = (pkg: { chips: number; price: number }) => {
     // Calculate Gold Coin cost (price in USD / 0.10 per GC)
-    const gcCost = pkg.price / 0.10;
+    const gcCost = pkg.price / 0.1;
     setSelectedPackage({ ...pkg, gcCost });
     setShowPaymentModal(true);
   };
@@ -57,21 +53,28 @@ const Shop: React.FC<ShopProps> = ({
   const handlePayment = (method: string) => {
     if (selectedPackage) {
       let success = false;
-      
-      if (method === 'Gold Coin' && selectedPackage.gcCost) {
+
+      if (method === "Gold Coin" && selectedPackage.gcCost) {
         // Use Gold Coins to buy Sweepstake Coins
-        success = onBuySweepstakeCoinsWithGC(selectedPackage.chips, selectedPackage.gcCost);
+        success = onBuySweepstakeCoinsWithGC(
+          selectedPackage.chips,
+          selectedPackage.gcCost
+        );
         if (!success) {
-          alert(`Not enough Gold Coins! You need ${selectedPackage.gcCost} GC.`);
+          alert(
+            `Not enough Gold Coins! You need ${selectedPackage.gcCost} GC.`
+          );
           return;
         }
       } else {
         // PayPal payment (demo - just add the chips)
-        console.log(`Processing ${method} payment for ${selectedPackage.chips} Sweepstake Coins`);
+        console.log(
+          `Processing ${method} payment for ${selectedPackage.chips} Sweepstake Coins`
+        );
         onBuySweepstakeCoins(selectedPackage.chips);
         success = true;
       }
-      
+
       if (success) {
         setShowPaymentModal(false);
         setSelectedPackage(null);
@@ -85,18 +88,18 @@ const Shop: React.FC<ShopProps> = ({
     setSelectedPackage(null);
   };
 
-  const handleBuyProperty = (propertyType: 'history' | 'doubleProgress') => {
+  const handleBuyProperty = (propertyType: "history" | "doubleProgress") => {
     let success = false;
-    if (propertyType === 'history') {
+    if (propertyType === "history") {
       success = onBuyHistoryExtension();
-    } else if (propertyType === 'doubleProgress') {
+    } else if (propertyType === "doubleProgress") {
       success = onBuyDoubleProgress();
     }
-    
+
     if (success) {
-      alert('Property purchased successfully!');
+      alert("Property purchased successfully!");
     } else {
-      alert('Not enough chips or already owned!');
+      alert("Not enough chips or already owned!");
     }
   };
 
@@ -113,25 +116,30 @@ const Shop: React.FC<ShopProps> = ({
         </div>
 
         <div className="current-chips">
-          Current Sweepstake Coins: <span className="chips-count">{currentSweepstakeCoins}</span>
+          Current Sweepstake Coins:{" "}
+          <span className="chips-count">{currentSweepstakeCoins}</span>
         </div>
 
         <div className="shop-tabs">
-          <button 
-            className={`tab-button ${activeTab === 'sweepstake' ? 'active' : ''}`}
-            onClick={() => setActiveTab('sweepstake')}
+          <button
+            className={`tab-button ${
+              activeTab === "sweepstake" ? "active" : ""
+            }`}
+            onClick={() => setActiveTab("sweepstake")}
           >
             🪙 Sweepstake Coins
           </button>
-          <button 
-            className={`tab-button ${activeTab === 'properties' ? 'active' : ''}`}
-            onClick={() => setActiveTab('properties')}
+          <button
+            className={`tab-button ${
+              activeTab === "properties" ? "active" : ""
+            }`}
+            onClick={() => setActiveTab("properties")}
           >
             ⚡ Properties
           </button>
         </div>
 
-        {activeTab === 'sweepstake' ? (
+        {activeTab === "sweepstake" ? (
           <>
             <div className="packages-grid">
               {paypalPackages.map((pkg, index) => (
@@ -145,10 +153,7 @@ const Shop: React.FC<ShopProps> = ({
                     <div className="chips-amount">{pkg.chips}</div>
                   </div>
                   <div className="package-price">${pkg.price}</div>
-                  <button
-                    className="buy-button"
-                    onClick={() => handleBuy(pkg)}
-                  >
+                  <button className="buy-button" onClick={() => handleBuy(pkg)}>
                     Buy Now
                   </button>
                 </div>
@@ -160,7 +165,9 @@ const Shop: React.FC<ShopProps> = ({
           </>
         ) : (
           <div className="properties-grid">
-            <div className={`property-card ${hasHistoryExtension ? 'owned' : ''}`}>
+            <div
+              className={`property-card ${hasHistoryExtension ? "owned" : ""}`}
+            >
               <div className="property-icon">📜</div>
               <div className="property-name">History Extension</div>
               <div className="property-description">
@@ -168,15 +175,17 @@ const Shop: React.FC<ShopProps> = ({
               </div>
               <div className="property-price">🪙 5,000</div>
               <button
-                className={`buy-button ${hasHistoryExtension ? 'owned' : ''}`}
-                onClick={() => handleBuyProperty('history')}
+                className={`buy-button ${hasHistoryExtension ? "owned" : ""}`}
+                onClick={() => handleBuyProperty("history")}
                 disabled={hasHistoryExtension}
               >
-                {hasHistoryExtension ? 'OWNED' : 'Buy'}
+                {hasHistoryExtension ? "OWNED" : "Buy"}
               </button>
             </div>
 
-            <div className={`property-card ${hasDoubleProgress ? 'owned' : ''}`}>
+            <div
+              className={`property-card ${hasDoubleProgress ? "owned" : ""}`}
+            >
               <div className="property-icon">⚡</div>
               <div className="property-name">Double Progress</div>
               <div className="property-description">
@@ -184,11 +193,11 @@ const Shop: React.FC<ShopProps> = ({
               </div>
               <div className="property-price">🪙 10,000</div>
               <button
-                className={`buy-button ${hasDoubleProgress ? 'owned' : ''}`}
-                onClick={() => handleBuyProperty('doubleProgress')}
+                className={`buy-button ${hasDoubleProgress ? "owned" : ""}`}
+                onClick={() => handleBuyProperty("doubleProgress")}
                 disabled={hasDoubleProgress}
               >
-                {hasDoubleProgress ? 'OWNED' : 'Buy'}
+                {hasDoubleProgress ? "OWNED" : "Buy"}
               </button>
             </div>
           </div>
@@ -206,22 +215,32 @@ const Shop: React.FC<ShopProps> = ({
             </div>
             <div className="payment-details">
               <p>Purchase: {selectedPackage?.chips} Sweepstake Coins</p>
-              <p>Price: ${selectedPackage?.price} (or {selectedPackage?.gcCost} GC)</p>
+              <p>
+                Price: ${selectedPackage?.price} (or {selectedPackage?.gcCost}{" "}
+                GC)
+              </p>
               <p>Your Gold Coins: {currentGoldCoins.toFixed(1)} GC</p>
             </div>
             <div className="payment-methods">
-              <button 
+              <button
                 className="payment-button paypal"
-                onClick={() => handlePayment('PayPal')}
+                onClick={() => handlePayment("PayPal")}
               >
                 💳 PayPal
               </button>
-              <button 
+              <button
                 className="payment-button gold-coin"
-                onClick={() => handlePayment('Gold Coin')}
-                disabled={!selectedPackage?.gcCost || currentGoldCoins < selectedPackage.gcCost}
+                onClick={() => handlePayment("Gold Coin")}
+                disabled={
+                  !selectedPackage?.gcCost ||
+                  currentGoldCoins < selectedPackage.gcCost
+                }
               >
-                🏆 Gold Coins {selectedPackage?.gcCost && currentGoldCoins < selectedPackage.gcCost ? '(Insufficient)' : ''}
+                🏆 Gold Coins{" "}
+                {selectedPackage?.gcCost &&
+                currentGoldCoins < selectedPackage.gcCost
+                  ? "(Insufficient)"
+                  : ""}
               </button>
             </div>
           </div>
