@@ -21,16 +21,13 @@ const Shop: React.FC<ShopProps> = ({
   onBuyGoldCoins,
   onBuySweepCoins,
   currentSweepstakeCoins,
-  currentGoldCoins,
   hasHistoryExtension,
   hasDoubleProgress,
   onBuyHistoryExtension,
   onBuyDoubleProgress,
   onBuyGoldCoinsWithSC,
 }) => {
-  const [activeTab, setActiveTab] = useState<"gold" | "properties">(
-    "gold"
-  );
+  const [activeTab, setActiveTab] = useState<"gold" | "properties">("gold");
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<{
     chips: number;
@@ -40,37 +37,41 @@ const Shop: React.FC<ShopProps> = ({
 
   // PayPal packages with free SC bonuses
   const paypalPackages = [
-    { 
-      chips: 1000, 
-      price: 1.99, 
-      popular: false, 
+    {
+      chips: 1000,
+      price: 1.99,
+      popular: false,
       bonusSC: 2.0,
-      badge: null 
+      badge: null,
     },
-    { 
-      chips: 3000, 
-      price: 3.99, 
-      popular: true, 
+    {
+      chips: 3000,
+      price: 3.99,
+      popular: true,
       bonusSC: 5.0,
-      badge: "MOST POPULAR" 
+      badge: "MOST POPULAR",
     },
-    { 
-      chips: 5000, 
-      price: 6.99, 
-      popular: false, 
+    {
+      chips: 5000,
+      price: 6.99,
+      popular: false,
       bonusSC: 10.0,
-      badge: "BEST VALUE" 
+      badge: "BEST VALUE",
     },
-    { 
-      chips: 10000, 
-      price: 12.99, 
-      popular: false, 
+    {
+      chips: 10000,
+      price: 12.99,
+      popular: false,
       bonusSC: 25.0,
-      badge: "MEGA PACK" 
+      badge: "MEGA PACK",
     },
   ];
 
-  const handleBuy = (pkg: { chips: number; price: number; bonusSC: number }) => {
+  const handleBuy = (pkg: {
+    chips: number;
+    price: number;
+    bonusSC: number;
+  }) => {
     // Calculate Sweepstake Coin cost (price in USD / 0.10 per SC)
     const scCost = pkg.price / 0.1;
     setSelectedPackage({ ...pkg, gcCost: scCost });
@@ -96,7 +97,9 @@ const Shop: React.FC<ShopProps> = ({
       } else {
         // PayPal payment (demo - add gold coins + bonus sweep coins)
         console.log(
-          `Processing ${method} payment for ${selectedPackage.chips} Gold Coins + ${(selectedPackage as any).bonusSC} bonus SC`
+          `Processing ${method} payment for ${
+            selectedPackage.chips
+          } Gold Coins + ${(selectedPackage as any).bonusSC} bonus SC`
         );
         onBuyGoldCoins(selectedPackage.chips);
         if ((selectedPackage as any).bonusSC) {
@@ -148,17 +151,25 @@ const Shop: React.FC<ShopProps> = ({
           </div>
           <button className="close-button" onClick={onClose}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path
+                d="M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <path
+                d="M6 6L18 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
         </div>
 
         <div className="shop-tabs">
           <button
-            className={`tab-button ${
-              activeTab === "gold" ? "active" : ""
-            }`}
+            className={`tab-button ${activeTab === "gold" ? "active" : ""}`}
             onClick={() => setActiveTab("gold")}
           >
             <div className="tab-icon">💰</div>
@@ -181,18 +192,24 @@ const Shop: React.FC<ShopProps> = ({
               {paypalPackages.map((pkg, index) => (
                 <div
                   key={index}
-                  className={`package-card ${pkg.popular ? "popular" : ""} ${pkg.badge === "MEGA PACK" ? "mega" : ""} ${pkg.badge === "BEST VALUE" ? "best-value" : ""}`}
+                  className={`package-card ${pkg.popular ? "popular" : ""} ${
+                    pkg.badge === "MEGA PACK" ? "mega" : ""
+                  } ${pkg.badge === "BEST VALUE" ? "best-value" : ""}`}
                 >
-                  {pkg.badge && <div className="package-badge">{pkg.badge}</div>}
-                  
+                  {pkg.badge && (
+                    <div className="package-badge">{pkg.badge}</div>
+                  )}
+
                   <div className="package-content">
                     <div className="package-main">
                       <div className="package-chips">
                         <div className="chips-icon">🪙</div>
-                        <div className="chips-amount">{pkg.chips.toLocaleString()}</div>
+                        <div className="chips-amount">
+                          {pkg.chips.toLocaleString()}
+                        </div>
                         <div className="chips-label">Gold Coins</div>
                       </div>
-                      
+
                       <div className="package-bonus">
                         <div className="bonus-header">+ FREE BONUS</div>
                         <div className="bonus-sc">
@@ -202,9 +219,12 @@ const Shop: React.FC<ShopProps> = ({
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="package-footer">
-                      <button className="buy-button premium" onClick={() => handleBuy(pkg)}>
+                      <button
+                        className="buy-button premium"
+                        onClick={() => handleBuy(pkg)}
+                      >
                         Buy ${pkg.price}
                       </button>
                     </div>
