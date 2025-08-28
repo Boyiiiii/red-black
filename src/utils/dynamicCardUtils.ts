@@ -20,7 +20,8 @@ const values = [
 export const generateDynamicCard = (
   userChoice: BetChoice,
   bettingStats: BettingStats,
-  cashoutWins: number = 0,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _cashoutWins: number = 0,
   consecutiveWins: number = 0,
   isNewPlayer: boolean = false
 ): Card => {
@@ -49,12 +50,13 @@ export const generateDynamicCard = (
     // Let them win to build pending prizes and get excited about big cashouts
     winChanceModifier += 0.2; // Boost wins to build pending prize
   }
-  
+
   // GREED PUNISHMENT: Players who don't cashout at milestones get punished
-  const wasCashoutOpportunity = [3, 6, 9, 12, 15].some(milestone => 
-    consecutiveWins > milestone && consecutiveWins <= milestone + 2
+  const wasCashoutOpportunity = [3, 6, 9, 12, 15].some(
+    (milestone) =>
+      consecutiveWins > milestone && consecutiveWins <= milestone + 2
   );
-  
+
   if (wasCashoutOpportunity) {
     // They had a cashout opportunity but didn't take it - make them lose
     winChanceModifier -= 0.4; // Heavy penalty for not cashing out
@@ -67,7 +69,8 @@ export const generateDynamicCard = (
   }
 
   // COMEBACK MECHANICS: Let them build back up after losing pending prizes
-  const hasLostBigRecently = bettingStats.recentResults.slice(0, 5).filter(r => !r).length >= 3;
+  const hasLostBigRecently =
+    bettingStats.recentResults.slice(0, 5).filter((r) => !r).length >= 3;
   if (hasLostBigRecently) {
     // They recently lost - give them wins to build confidence again
     winChanceModifier += 0.3;
