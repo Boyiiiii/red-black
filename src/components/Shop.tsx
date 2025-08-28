@@ -4,30 +4,30 @@ import "./Shop.css";
 interface ShopProps {
   isOpen: boolean;
   onClose: () => void;
-  onBuySweepstakeCoins: (amount: number) => void;
+  onBuyGoldCoins: (amount: number) => void;
   currentSweepstakeCoins: number;
   currentGoldCoins: number;
   hasHistoryExtension: boolean;
   hasDoubleProgress: boolean;
   onBuyHistoryExtension: () => boolean;
   onBuyDoubleProgress: () => boolean;
-  onBuySweepstakeCoinsWithGC: (scAmount: number, gcCost: number) => boolean;
+  onBuyGoldCoinsWithSC: (gcAmount: number, scCost: number) => boolean;
 }
 
 const Shop: React.FC<ShopProps> = ({
   isOpen,
   onClose,
-  onBuySweepstakeCoins,
+  onBuyGoldCoins,
   currentSweepstakeCoins,
   currentGoldCoins,
   hasHistoryExtension,
   hasDoubleProgress,
   onBuyHistoryExtension,
   onBuyDoubleProgress,
-  onBuySweepstakeCoinsWithGC,
+  onBuyGoldCoinsWithSC,
 }) => {
-  const [activeTab, setActiveTab] = useState<"sweepstake" | "properties">(
-    "sweepstake"
+  const [activeTab, setActiveTab] = useState<"gold" | "properties">(
+    "gold"
   );
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<{
@@ -36,7 +36,7 @@ const Shop: React.FC<ShopProps> = ({
     gcCost?: number;
   } | null>(null);
 
-  // PayPal packages (real money)
+  // PayPal packages (buy gold coins with real money)
   const paypalPackages = [
     { chips: 1000, price: 1.99, popular: false },
     { chips: 3000, price: 3.99, popular: true },
@@ -44,9 +44,9 @@ const Shop: React.FC<ShopProps> = ({
   ];
 
   const handleBuy = (pkg: { chips: number; price: number }) => {
-    // Calculate Gold Coin cost (price in USD / 0.10 per GC)
-    const gcCost = pkg.price / 0.1;
-    setSelectedPackage({ ...pkg, gcCost });
+    // Calculate Sweepstake Coin cost (price in USD / 0.10 per SC)
+    const scCost = pkg.price / 0.1;
+    setSelectedPackage({ ...pkg, gcCost: scCost });
     setShowPaymentModal(true);
   };
 
@@ -54,24 +54,24 @@ const Shop: React.FC<ShopProps> = ({
     if (selectedPackage) {
       let success = false;
 
-      if (method === "Gold Coin" && selectedPackage.gcCost) {
-        // Use Gold Coins to buy Sweepstake Coins
-        success = onBuySweepstakeCoinsWithGC(
+      if (method === "Sweepstake Coin" && selectedPackage.gcCost) {
+        // Use Sweep Coins to buy Gold Coins
+        success = onBuyGoldCoinsWithSC(
           selectedPackage.chips,
           selectedPackage.gcCost
         );
         if (!success) {
           alert(
-            `Not enough Gold Coins! You need ${selectedPackage.gcCost} GC.`
+            `Not enough Sweep Coins! You need ${selectedPackage.gcCost} SC.`
           );
           return;
         }
       } else {
-        // PayPal payment (demo - just add the chips)
+        // PayPal payment (demo - just add the gold coins)
         console.log(
-          `Processing ${method} payment for ${selectedPackage.chips} Sweepstake Coins`
+          `Processing ${method} payment for ${selectedPackage.chips} Gold Coins`
         );
-        onBuySweepstakeCoins(selectedPackage.chips);
+        onBuyGoldCoins(selectedPackage.chips);
         success = true;
       }
 
@@ -116,18 +116,22 @@ const Shop: React.FC<ShopProps> = ({
         </div>
 
         <div className="current-chips">
-          Current Sweepstake Coins:{" "}
-          <span className="chips-count">{currentSweepstakeCoins}</span>
+          Current Gold Coins:{" "}
+          <span className="chips-count">{currentGoldCoins}</span>
+        </div>
+        <div className="current-chips">
+          Current Sweep Coins:{" "}
+          <span className="chips-count">{currentSweepstakeCoins.toFixed(1)}</span>
         </div>
 
         <div className="shop-tabs">
           <button
             className={`tab-button ${
-              activeTab === "sweepstake" ? "active" : ""
+              activeTab === "gold" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("sweepstake")}
+            onClick={() => setActiveTab("gold")}
           >
-            🪙 Sweepstake Coins
+            🪙 Gold Coins
           </button>
           <button
             className={`tab-button ${
@@ -139,7 +143,7 @@ const Shop: React.FC<ShopProps> = ({
           </button>
         </div>
 
-        {activeTab === "sweepstake" ? (
+        {activeTab === "gold" ? (
           <>
             <div className="packages-grid">
               {paypalPackages.map((pkg, index) => (
@@ -214,12 +218,12 @@ const Shop: React.FC<ShopProps> = ({
               </button>
             </div>
             <div className="payment-details">
-              <p>Purchase: {selectedPackage?.chips} Sweepstake Coins</p>
+              <p>Purchase: {selectedPackage?.chips} Gold Coins</p>
               <p>
                 Price: ${selectedPackage?.price} (or {selectedPackage?.gcCost}{" "}
-                GC)
+                SC)
               </p>
-              <p>Your Gold Coins: {currentGoldCoins.toFixed(1)} GC</p>
+              <p>Your Sweep Coins: {currentSweepstakeCoins.toFixed(1)} SC</p>
             </div>
             <div className="payment-methods">
               <button
@@ -229,16 +233,16 @@ const Shop: React.FC<ShopProps> = ({
                 💳 PayPal
               </button>
               <button
-                className="payment-button gold-coin"
-                onClick={() => handlePayment("Gold Coin")}
+                className="payment-button sweepstake-coin"
+                onClick={() => handlePayment("Sweepstake Coin")}
                 disabled={
                   !selectedPackage?.gcCost ||
-                  currentGoldCoins < selectedPackage.gcCost
+                  currentSweepstakeCoins < selectedPackage.gcCost
                 }
               >
-                🏆 Gold Coins{" "}
+                💰 Sweep Coins{" "}
                 {selectedPackage?.gcCost &&
-                currentGoldCoins < selectedPackage.gcCost
+                currentSweepstakeCoins < selectedPackage.gcCost
                   ? "(Insufficient)"
                   : ""}
               </button>

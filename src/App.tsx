@@ -9,13 +9,13 @@ import "./App.css";
 function App() {
   const {
     gameState,
-    addSweepstakeCoins,
+    addGoldCoins,
     playGame,
     closeResult,
     cashOut,
     buyHistoryExtension,
     buyDoubleProgress,
-    buySweepstakeCoinsWithGC,
+    buyGoldCoinsWithSC,
   } = useGameState();
   const [showShop, setShowShop] = useState(false);
   const [showRules, setShowRules] = useState(false);
@@ -24,8 +24,8 @@ function App() {
   const [betAmount, setBetAmount] = useState(100);
   const [inputBetAmount, setInputBetAmount] = useState("100");
 
-  const handleBuySweepstakeCoins = (amount: number) => {
-    addSweepstakeCoins(amount);
+  const handleBuyGoldCoins = (amount: number) => {
+    addGoldCoins(amount);
     setPurchasedAmount(amount);
     setShowChipAnimation(true);
     setTimeout(() => setShowChipAnimation(false), 2000);
@@ -81,7 +81,7 @@ function App() {
                   gameState.baseCashoutRate *
                   gameState.cashoutBonus
                 ).toFixed(2)}{" "}
-                Golden Coins
+                Sweep Coins
               </div>
               <div className="bonus-rate">
                 Bonus: {gameState.cashoutBonus.toFixed(1)}x
@@ -94,11 +94,13 @@ function App() {
                     {gameState.cashoutTimer}s
                   </div>
                   <button className="cashout-button-large" onClick={cashOut}>
-                    Cashout {(
+                    Cashout{" "}
+                    {(
                       gameState.consecutiveWins *
                       gameState.baseCashoutRate *
                       gameState.cashoutBonus
-                    ).toFixed(2)} Golden Coins
+                    ).toFixed(2)}{" "}
+                    Sweep Coins
                   </button>
                   <div className="potential-amount-large">
                     {(
@@ -106,7 +108,7 @@ function App() {
                       gameState.baseCashoutRate *
                       gameState.cashoutBonus
                     ).toFixed(2)}{" "}
-                    GC
+                    SC
                   </div>
                 </div>
               )}
@@ -175,20 +177,18 @@ function App() {
 
       {/* BETTING/ACTION PANEL */}
       <div className="betting-action-section">
-        {/* Header with Sweepstake Coins and GC Display */}
+        {/* Header with Gold Coins and SC Display */}
         <div className="bet-section-header">
-          <div className="gold-coins-display">
-            <div className="gold-coins-label">Golden Coin</div>
-            <div className="gold-coins-amount">
-              💰 {gameState.goldCoins.toFixed(1)}
+          <div className="sweep-coins-display">
+            <div className="sweep-coins-label">Sweep Coin</div>
+            <div className="sweep-coins-amount">
+              💰 {gameState.sweepstakeCoins.toFixed(1)}
             </div>
           </div>
           <div className="balance-info">
             <div className="balance-item">
-              <div className="balance-label">Sweepstake Coins</div>
-              <div className="balance-amount">
-                🪙{gameState.sweepstakeCoins}
-              </div>
+              <div className="balance-label">Gold Coins</div>
+              <div className="balance-amount">🪙{gameState.goldCoins}</div>
             </div>
           </div>
         </div>
@@ -244,7 +244,7 @@ function App() {
               className="bet-btn red-bet"
               onClick={() => playGame("red", betAmount)}
               disabled={
-                gameState.sweepstakeCoins < betAmount ||
+                gameState.goldCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -256,7 +256,7 @@ function App() {
               className="bet-btn black-bet"
               onClick={() => playGame("black", betAmount)}
               disabled={
-                gameState.sweepstakeCoins < betAmount ||
+                gameState.goldCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -272,7 +272,7 @@ function App() {
               className="bet-btn suit-btn hearts-bet"
               onClick={() => playGame("hearts", betAmount)}
               disabled={
-                gameState.sweepstakeCoins < betAmount ||
+                gameState.goldCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -284,7 +284,7 @@ function App() {
               className="bet-btn suit-btn diamonds-bet"
               onClick={() => playGame("diamonds", betAmount)}
               disabled={
-                gameState.sweepstakeCoins < betAmount ||
+                gameState.goldCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -296,7 +296,7 @@ function App() {
               className="bet-btn suit-btn clubs-bet"
               onClick={() => playGame("clubs", betAmount)}
               disabled={
-                gameState.sweepstakeCoins < betAmount ||
+                gameState.goldCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -308,7 +308,7 @@ function App() {
               className="bet-btn suit-btn spades-bet"
               onClick={() => playGame("spades", betAmount)}
               disabled={
-                gameState.sweepstakeCoins < betAmount ||
+                gameState.goldCoins < betAmount ||
                 gameState.isFlipping ||
                 gameState.showResult
               }
@@ -329,11 +329,11 @@ function App() {
       )}
 
       {/* Game Over Modal */}
-      {gameState.sweepstakeCoins === 0 && !gameState.showResult && (
+      {gameState.goldCoins === 0 && !gameState.showResult && (
         <div className="game-over-overlay">
           <div className="game-over">
             <h2>Game Over!</h2>
-            <p>You're out of Sweepstake Coins! Visit the shop to buy more.</p>
+            <p>You're out of Gold Coins! Visit the shop to buy more.</p>
             <button onClick={() => setShowShop(true)}>Go to Shop</button>
           </div>
         </div>
@@ -343,14 +343,14 @@ function App() {
       <Shop
         isOpen={showShop}
         onClose={() => setShowShop(false)}
-        onBuySweepstakeCoins={handleBuySweepstakeCoins}
+        onBuyGoldCoins={handleBuyGoldCoins}
         currentSweepstakeCoins={gameState.sweepstakeCoins}
         currentGoldCoins={gameState.goldCoins}
         hasHistoryExtension={gameState.hasHistoryExtension}
         hasDoubleProgress={gameState.hasDoubleProgress}
         onBuyHistoryExtension={buyHistoryExtension}
         onBuyDoubleProgress={buyDoubleProgress}
-        onBuySweepstakeCoinsWithGC={buySweepstakeCoinsWithGC}
+        onBuyGoldCoinsWithSC={buyGoldCoinsWithSC}
       />
 
       {gameState.gameResult && (

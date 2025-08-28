@@ -26,8 +26,8 @@ export interface BettingStats {
 }
 
 export interface GameState {
-  sweepstakeCoins: number; // SC - for betting
-  goldCoins: number; // GC - real money value
+  sweepstakeCoins: number; // SC - real money value (Sweep Coins)
+  goldCoins: number; // GC - for betting
   bet: number;
   currentCard: Card | null;
   isFlipping: boolean;
@@ -45,8 +45,8 @@ export interface GameState {
   cashoutBonus: number; // Bonus multiplier for current streak
   cashoutTimer: number | null; // Countdown timer in seconds
   canCashout: boolean; // Whether cashout is available
-  goldCoinValue: number; // USD value per gold coin
-  baseCashoutRate: number; // Base GC earned per consecutive win
+  sweepCoinValue: number; // USD value per sweep coin
+  baseCashoutRate: number; // Base SC earned per consecutive win
 }
 
 export type BetChoice = 'red' | 'black' | 'hearts' | 'diamonds' | 'clubs' | 'spades';
