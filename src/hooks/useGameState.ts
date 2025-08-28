@@ -90,6 +90,13 @@ export const useGameState = () => {
     }));
   }, []);
 
+  const addSweepCoins = useCallback((amount: number) => {
+    setGameState((prev) => ({
+      ...prev,
+      sweepstakeCoins: prev.sweepstakeCoins + amount,
+    }));
+  }, []);
+
   const playGame = useCallback(
     (choice: BetChoice, betAmount: number = 100) => {
       if (gameState.goldCoins < betAmount || gameState.isFlipping) return;
@@ -195,12 +202,12 @@ export const useGameState = () => {
             newCashoutTimer = CASHOUT_TIMER_SECONDS;
             newCanCashout = true;
             newPendingPrize += betAmount;
-            // Set bonus based on milestone - much more attractive
-            if (newConsecutiveWins === 3) newCashoutBonus = 2.0;
-            else if (newConsecutiveWins === 6) newCashoutBonus = 4.0;
-            else if (newConsecutiveWins === 9) newCashoutBonus = 8.0;
-            else if (newConsecutiveWins === 12) newCashoutBonus = 15.0;
-            else if (newConsecutiveWins === 15) newCashoutBonus = 30.0;
+            // Set bonus based on milestone - EXTREMELY attractive multipliers
+            if (newConsecutiveWins === 3) newCashoutBonus = 5.0;
+            else if (newConsecutiveWins === 6) newCashoutBonus = 15.0;
+            else if (newConsecutiveWins === 9) newCashoutBonus = 50.0;
+            else if (newConsecutiveWins === 12) newCashoutBonus = 150.0;
+            else if (newConsecutiveWins === 15) newCashoutBonus = 500.0;
           } else if (won) {
             // Regular win - just add to pending, no cashout opportunity
             newPendingPrize += betAmount;
@@ -367,6 +374,7 @@ export const useGameState = () => {
     gameState,
     setBet,
     addGoldCoins,
+    addSweepCoins,
     playGame,
     resetGame,
     closeResult,

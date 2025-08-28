@@ -50,14 +50,46 @@ export const generateDynamicCard = (
       winChanceModifier += 0.15; // Moderate comeback after 3-4 losses
     }
 
-    // GOLD COIN BURNING STRATEGY: Build them up, then take it all
-    if (consecutiveWins >= 1 && consecutiveWins < 15) {
-      // Let them build pending prizes to get excited about big multipliers
+    // NATURAL WIN PATTERN STRATEGY: Make wins feel organic and varied
+    if (consecutiveWins >= 1 && consecutiveWins <= 5) {
+      // Early wins - good boost to build confidence
       if (isColorBet) {
-        winChanceModifier += 0.15; // Moderate boost for color bets
+        winChanceModifier += 0.2; // Good boost for early wins
       } else {
-        winChanceModifier += 0.2; // Moderate boost for suit bets to compensate for lower base rate
+        winChanceModifier += 0.25; // Slightly better for suits
       }
+    } else if (consecutiveWins >= 6 && consecutiveWins <= 8) {
+      // Mid-range wins - vary the experience more naturally
+      const randomFactor = Math.random();
+      if (randomFactor > 0.7) {
+        // 30% chance of good streak continuing
+        winChanceModifier += 0.15;
+      } else if (randomFactor > 0.4) {
+        // 30% chance of neutral
+        winChanceModifier += 0.05;
+      } else {
+        // 40% chance of slight penalty but not crushing
+        winChanceModifier -= 0.05;
+      }
+    } else if (consecutiveWins === 9) {
+      // At 9 wins - let them sometimes see that big multiplier
+      winChanceModifier += 0.1; // Moderate boost
+    } else if (consecutiveWins >= 10 && consecutiveWins <= 12) {
+      // Higher wins - more varied, sometimes they get lucky
+      const randomFactor = Math.random();
+      if (randomFactor > 0.8) {
+        // 20% chance they get really lucky
+        winChanceModifier += 0.1;
+      } else if (randomFactor > 0.5) {
+        // 30% chance of moderate penalty
+        winChanceModifier -= 0.1;
+      } else {
+        // 50% chance of bigger penalty
+        winChanceModifier -= 0.2;
+      }
+    } else if (consecutiveWins >= 13) {
+      // Very high wins - still possible but harder
+      winChanceModifier -= 0.25;
     }
 
     // SUIT BET SPECIFIC LOGIC: Make them feel lucky occasionally
@@ -79,15 +111,25 @@ export const generateDynamicCard = (
       }
     }
 
-    // GREED PUNISHMENT: Missed cashout opportunities get punished hard
+    // VARIED GREED PUNISHMENT: Sometimes they get away with it, sometimes they don't
     const wasCashoutOpportunity = [3, 6, 9, 12, 15].some(
       (milestone) =>
         consecutiveWins > milestone && consecutiveWins <= milestone + 2
     );
     
     if (wasCashoutOpportunity) {
-      // They had a cashout opportunity but got greedy - burn their GC
-      winChanceModifier -= 0.5; // Heavy penalty for greed
+      // They had a cashout opportunity but got greedy
+      const greedPunishment = Math.random();
+      if (greedPunishment > 0.6) {
+        // 40% chance of heavy punishment
+        winChanceModifier -= 0.4;
+      } else if (greedPunishment > 0.3) {
+        // 30% chance of moderate punishment
+        winChanceModifier -= 0.2;
+      } else {
+        // 30% chance they get lucky and continue (makes them think they can beat the system)
+        winChanceModifier -= 0.05;
+      }
     }
 
     // GC BURNING ACCELERATION: If they're winning too much, burn them faster
@@ -96,9 +138,21 @@ export const generateDynamicCard = (
       winChanceModifier -= 0.2; // Reduce wins if they're winning too much
     }
 
+    // SESSION VARIETY: Some sessions feel luckier than others
+    const sessionSeed = Math.floor(bettingStats.totalBets / 20); // Changes every 20 bets
+    const sessionLuck = (sessionSeed * 123456789) % 100; // Pseudo-random session modifier
+    
+    if (sessionLuck > 80) {
+      // 20% of sessions are "lucky sessions"
+      winChanceModifier += 0.1;
+    } else if (sessionLuck < 20) {
+      // 20% of sessions are "unlucky sessions" 
+      winChanceModifier -= 0.08;
+    }
+    
     // ENGAGEMENT MAINTENANCE: Don't let them quit completely
     if (bettingStats.recentWinRate < 0.25) {
-      winChanceModifier += 0.2; // Give them hope with some wins
+      winChanceModifier += 0.25; // Stronger comeback to prevent rage quit
     }
 
     // LONG SESSION BURNING: The longer they play, the more we take

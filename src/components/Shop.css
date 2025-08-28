@@ -4,64 +4,107 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(12px);
+  animation: overlayFadeIn 0.3s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .shop-modal {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  border-radius: 20px;
-  padding: 32px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-  border: 3px solid #ffd700;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+  border-radius: 24px;
+  padding: 0;
+  max-width: 700px;
+  width: 92%;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
   position: relative;
+  animation: modalSlideIn 0.4s ease;
+}
+
+@keyframes modalSlideIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
 }
 
 .shop-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  color: white;
   position: relative;
 }
 
-.shop-header h2 {
-  color: #ffd700;
+.shop-title-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-icon {
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.shop-title-text h2 {
   margin: 0;
-  font-size: 28px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  line-height: 1.1;
+}
+
+.shop-title-text p {
+  margin: 1px 0 0 0;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
 }
 
 .close-button {
-  background: none;
-  border: none;
-  color: #ffd700;
-  font-size: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
   cursor: pointer;
-  padding: 0;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  padding: 4px;
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .close-button:hover {
-  background: rgba(255, 215, 0, 0.2);
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
+}
+
+.close-button svg {
+  width: 12px;
+  height: 12px;
 }
 
 .current-chips {
@@ -83,9 +126,12 @@
 
 .packages-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 32px;
+  background: linear-gradient(145deg, #1e293b, #334155);
+  overflow-y: auto;
+  max-height: 50vh;
 }
 
 .package-card {
@@ -100,9 +146,9 @@
 }
 
 .package-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(1.02);
   border-color: #ffd700;
-  box-shadow: 0 12px 30px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4);
 }
 
 .package-card.popular {
@@ -178,6 +224,7 @@
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: auto;
 }
 
 .buy-button:hover {
@@ -211,41 +258,53 @@
 }
 
 .payment-modal {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 400px;
-  width: 90%;
-  border: 2px solid #ffd700;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(145deg, #1e293b, #334155);
+  border-radius: 20px;
+  padding: 0;
+  max-width: 450px;
+  width: 92%;
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
 }
 
 .payment-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   position: relative;
 }
 
 .payment-header h3 {
   color: #ffd700;
   margin: 0;
-  font-size: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .payment-details {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 24px;
   border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .payment-details p {
-  margin: 4px 0;
-  color: #fff;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.payment-details p:first-child {
+  color: #ffd700;
+  font-weight: bold;
   font-size: 16px;
 }
 
@@ -253,144 +312,155 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 0 24px 24px 24px;
 }
 
 .payment-button {
-  padding: 14px 20px;
+  padding: 16px 20px;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .payment-button.paypal {
   background: linear-gradient(135deg, #0070ba, #003087);
   color: white;
+  border: 1px solid rgba(0, 112, 186, 0.5);
 }
 
 .payment-button.paypal:hover {
   background: linear-gradient(135deg, #003087, #001c64);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 112, 186, 0.4);
 }
 
-.payment-button.apple-pay {
-  background: linear-gradient(135deg, #000, #333);
-  color: white;
-}
 
-.payment-button.apple-pay:hover {
-  background: linear-gradient(135deg, #333, #000);
-  transform: translateY(-2px);
-}
-
-.payment-button.gold-coin {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
+.payment-button.sweepstake-coin {
+  background: linear-gradient(135deg, #ffd700, #ffa500);
   color: #000;
   font-weight: bold;
+  border: 1px solid rgba(255, 215, 0, 0.5);
 }
 
-.payment-button.gold-coin:hover {
-  background: linear-gradient(135deg, #FFA500, #FF8C00);
+.payment-button.sweepstake-coin:hover {
+  background: linear-gradient(135deg, #ffa500, #ff8c00);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
 }
 
-.payment-button.gold-coin:disabled {
-  background: linear-gradient(135deg, #999, #666) !important;
-  color: #ccc !important;
+.payment-button.sweepstake-coin:disabled {
+  background: linear-gradient(135deg, #64748b, #475569) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
   cursor: not-allowed !important;
   transform: none !important;
+  box-shadow: none !important;
 }
 
 .shop-tabs {
   display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
-  gap: 8px;
+  background: linear-gradient(135deg, #334155, #475569);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tab-button {
-  padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 215, 0, 0.3);
-  border-radius: 12px;
+  flex: 1;
+  background: none;
+  border: none;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 8px 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  flex: 1;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.tab-button .tab-icon {
+  font-size: 12px;
 }
 
 .tab-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 215, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .tab-button.active {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  border-color: #ffd700;
-  color: #000;
-  font-weight: bold;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  border-bottom-color: #ffd700;
+  box-shadow: 0 -2px 8px rgba(255, 215, 0, 0.3);
 }
 
 .properties-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 32px;
+  background: linear-gradient(145deg, #1e293b, #334155);
+  overflow-y: auto;
+  max-height: 50vh;
 }
 
 .property-card {
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 215, 0, 0.3);
   border-radius: 16px;
-  padding: 20px;
+  padding: 24px 16px;
   text-align: center;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .property-card:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 215, 0, 0.5);
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02);
+  border-color: #ffd700;
+  box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4);
 }
 
 .property-card.owned {
-  background: rgba(46, 213, 115, 0.2);
-  border-color: #2ed573;
+  border-color: #10b981;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
 }
 
 .property-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+  font-size: 32px;
+  margin-bottom: 8px;
+  animation: bounce 2s infinite;
 }
 
 .property-name {
   color: #ffd700;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .property-description {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 16px;
   line-height: 1.4;
+  flex: 1;
 }
 
-.property-price {
-  color: #ffd700;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
 
 .buy-button.owned {
   background: rgba(46, 213, 115, 0.8) !important;
@@ -400,4 +470,196 @@
 
 .buy-button.owned:hover {
   transform: none !important;
+}
+
+/* Professional Package Card Styles */
+.package-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+  z-index: 10;
+}
+
+.package-card.mega .package-badge {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.4);
+}
+
+.package-card.best-value .package-badge {
+  background: linear-gradient(135deg, #00b894, #00a085);
+  box-shadow: 0 4px 12px rgba(0, 184, 148, 0.4);
+}
+
+.package-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px 20px 20px 20px;
+}
+
+.package-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.package-chips {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.package-chips .chips-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.package-chips .chips-amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.package-chips .chips-label {
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.package-bonus {
+  text-align: center;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.bonus-header {
+  font-size: 10px;
+  color: #10b981;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.bonus-sc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bonus-icon {
+  font-size: 20px;
+}
+
+.bonus-amount {
+  font-size: 18px;
+  font-weight: bold;
+  color: #059669;
+}
+
+.bonus-label {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.package-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.buy-button.premium {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  width: 100%;
+}
+
+.buy-button.premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+
+/* Properties Grid - styles merged above */
+
+@media (max-width: 768px) {
+  .shop-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .shop-header {
+    padding: 3px 8px 2px 8px;
+  }
+  
+  .shop-title-section {
+    gap: 4px;
+  }
+  
+  .shop-icon {
+    font-size: 12px;
+  }
+  
+  .shop-title-text h2 {
+    font-size: 12px;
+    line-height: 1.1;
+  }
+  
+  .shop-title-text p {
+    font-size: 7px;
+    margin: 0px 0 0 0;
+  }
+  
+  .close-button {
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+  }
+  
+  .close-button svg {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .packages-grid {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 16px;
+  }
+  
+  .tab-button {
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+  
 }

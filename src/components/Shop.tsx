@@ -5,6 +5,7 @@ interface ShopProps {
   isOpen: boolean;
   onClose: () => void;
   onBuyGoldCoins: (amount: number) => void;
+  onBuySweepCoins: (amount: number) => void;
   currentSweepstakeCoins: number;
   currentGoldCoins: number;
   hasHistoryExtension: boolean;
@@ -18,6 +19,7 @@ const Shop: React.FC<ShopProps> = ({
   isOpen,
   onClose,
   onBuyGoldCoins,
+  onBuySweepCoins,
   currentSweepstakeCoins,
   currentGoldCoins,
   hasHistoryExtension,
@@ -36,14 +38,39 @@ const Shop: React.FC<ShopProps> = ({
     gcCost?: number;
   } | null>(null);
 
-  // PayPal packages (buy gold coins with real money)
+  // PayPal packages with free SC bonuses
   const paypalPackages = [
-    { chips: 1000, price: 1.99, popular: false },
-    { chips: 3000, price: 3.99, popular: true },
-    { chips: 5000, price: 6.99, popular: false },
+    { 
+      chips: 1000, 
+      price: 1.99, 
+      popular: false, 
+      bonusSC: 2.0,
+      badge: null 
+    },
+    { 
+      chips: 3000, 
+      price: 3.99, 
+      popular: true, 
+      bonusSC: 5.0,
+      badge: "MOST POPULAR" 
+    },
+    { 
+      chips: 5000, 
+      price: 6.99, 
+      popular: false, 
+      bonusSC: 10.0,
+      badge: "BEST VALUE" 
+    },
+    { 
+      chips: 10000, 
+      price: 12.99, 
+      popular: false, 
+      bonusSC: 25.0,
+      badge: "MEGA PACK" 
+    },
   ];
 
-  const handleBuy = (pkg: { chips: number; price: number }) => {
+  const handleBuy = (pkg: { chips: number; price: number; bonusSC: number }) => {
     // Calculate Sweepstake Coin cost (price in USD / 0.10 per SC)
     const scCost = pkg.price / 0.1;
     setSelectedPackage({ ...pkg, gcCost: scCost });
@@ -67,11 +94,14 @@ const Shop: React.FC<ShopProps> = ({
           return;
         }
       } else {
-        // PayPal payment (demo - just add the gold coins)
+        // PayPal payment (demo - add gold coins + bonus sweep coins)
         console.log(
-          `Processing ${method} payment for ${selectedPackage.chips} Gold Coins`
+          `Processing ${method} payment for ${selectedPackage.chips} Gold Coins + ${(selectedPackage as any).bonusSC} bonus SC`
         );
         onBuyGoldCoins(selectedPackage.chips);
+        if ((selectedPackage as any).bonusSC) {
+          onBuySweepCoins((selectedPackage as any).bonusSC);
+        }
         success = true;
       }
 
@@ -109,19 +139,19 @@ const Shop: React.FC<ShopProps> = ({
     <div className="shop-overlay">
       <div className="shop-modal">
         <div className="shop-header">
-          <h2>🏪 Shop</h2>
+          <div className="shop-title-section">
+            <div className="shop-icon">💎</div>
+            <div className="shop-title-text">
+              <h2>Premium Store</h2>
+              <p>Exclusive packages & power-ups</p>
+            </div>
+          </div>
           <button className="close-button" onClick={onClose}>
-            ×
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
           </button>
-        </div>
-
-        <div className="current-chips">
-          Current Gold Coins:{" "}
-          <span className="chips-count">{currentGoldCoins}</span>
-        </div>
-        <div className="current-chips">
-          Current Sweep Coins:{" "}
-          <span className="chips-count">{currentSweepstakeCoins.toFixed(1)}</span>
         </div>
 
         <div className="shop-tabs">
@@ -131,7 +161,8 @@ const Shop: React.FC<ShopProps> = ({
             }`}
             onClick={() => setActiveTab("gold")}
           >
-            🪙 Gold Coins
+            <div className="tab-icon">💰</div>
+            <span>Coin Packages</span>
           </button>
           <button
             className={`tab-button ${
@@ -139,7 +170,8 @@ const Shop: React.FC<ShopProps> = ({
             }`}
             onClick={() => setActiveTab("properties")}
           >
-            ⚡ Properties
+            <div className="tab-icon">⚡</div>
+            <span>Power-Ups</span>
           </button>
         </div>
 
@@ -149,22 +181,36 @@ const Shop: React.FC<ShopProps> = ({
               {paypalPackages.map((pkg, index) => (
                 <div
                   key={index}
-                  className={`package-card ${pkg.popular ? "popular" : ""}`}
+                  className={`package-card ${pkg.popular ? "popular" : ""} ${pkg.badge === "MEGA PACK" ? "mega" : ""} ${pkg.badge === "BEST VALUE" ? "best-value" : ""}`}
                 >
-                  {pkg.popular && <div className="popular-badge">POPULAR</div>}
-                  <div className="package-chips">
-                    <div className="chips-icon">🪙</div>
-                    <div className="chips-amount">{pkg.chips}</div>
+                  {pkg.badge && <div className="package-badge">{pkg.badge}</div>}
+                  
+                  <div className="package-content">
+                    <div className="package-main">
+                      <div className="package-chips">
+                        <div className="chips-icon">🪙</div>
+                        <div className="chips-amount">{pkg.chips.toLocaleString()}</div>
+                        <div className="chips-label">Gold Coins</div>
+                      </div>
+                      
+                      <div className="package-bonus">
+                        <div className="bonus-header">+ FREE BONUS</div>
+                        <div className="bonus-sc">
+                          <div className="bonus-icon">💰</div>
+                          <div className="bonus-amount">{pkg.bonusSC}</div>
+                          <div className="bonus-label">Sweep Coins</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="package-footer">
+                      <button className="buy-button premium" onClick={() => handleBuy(pkg)}>
+                        Buy ${pkg.price}
+                      </button>
+                    </div>
                   </div>
-                  <div className="package-price">${pkg.price}</div>
-                  <button className="buy-button" onClick={() => handleBuy(pkg)}>
-                    Buy Now
-                  </button>
                 </div>
               ))}
-            </div>
-            <div className="shop-note">
-              * This is a demo. No real money transactions.
             </div>
           </>
         ) : (
@@ -177,13 +223,12 @@ const Shop: React.FC<ShopProps> = ({
               <div className="property-description">
                 Show 10 card history instead of 5
               </div>
-              <div className="property-price">🪙 5,000</div>
               <button
                 className={`buy-button ${hasHistoryExtension ? "owned" : ""}`}
                 onClick={() => handleBuyProperty("history")}
                 disabled={hasHistoryExtension}
               >
-                {hasHistoryExtension ? "OWNED" : "Buy"}
+                {hasHistoryExtension ? "OWNED" : "Buy 🪙 5,000"}
               </button>
             </div>
 
@@ -195,13 +240,12 @@ const Shop: React.FC<ShopProps> = ({
               <div className="property-description">
                 Win one round counts as 2 progress in bonus track
               </div>
-              <div className="property-price">🪙 10,000</div>
               <button
                 className={`buy-button ${hasDoubleProgress ? "owned" : ""}`}
                 onClick={() => handleBuyProperty("doubleProgress")}
                 disabled={hasDoubleProgress}
               >
-                {hasDoubleProgress ? "OWNED" : "Buy"}
+                {hasDoubleProgress ? "OWNED" : "Buy 🪙 10,000"}
               </button>
             </div>
           </div>

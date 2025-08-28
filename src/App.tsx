@@ -10,6 +10,7 @@ function App() {
   const {
     gameState,
     addGoldCoins,
+    addSweepCoins,
     playGame,
     closeResult,
     cashOut,
@@ -115,9 +116,10 @@ function App() {
         <div className="progress-display">
           <div className="footprint-display">
             <div className="footprint-header">
-              <div className="pending-prize-info">
-                Pending Prize: {gameState.pendingPrize.toFixed(2)}{" "}
+              <div className={`pending-prize-info ${gameState.pendingPrize > 500 ? 'big-prize' : ''} ${gameState.pendingPrize > 1000 ? 'huge-prize' : ''}`}>
+                💰 Pending Prize: {gameState.pendingPrize.toFixed(0)}{" "}
                 {gameState.pendingPrizeCurrency === "gold" ? "GC" : "SC"}
+                {gameState.pendingPrize > 800 && <span className="fire-emoji"> 🔥</span>}
               </div>
               <div className="bonus-info">
                 {gameState.canCashout && gameState.cashoutTimer ? (
@@ -137,19 +139,19 @@ function App() {
                     </button>
                   </div>
                 ) : (
-                  <span>
+                  <span className="next-bonus-display">
                     Next Bonus:{" "}
                     {gameState.consecutiveWins < 3
-                      ? "2.0x @ 3 wins"
+                      ? "🚀 5x @ 3 wins"
                       : gameState.consecutiveWins < 6
-                      ? "4.0x @ 6 wins"
+                      ? "⭐ 15x @ 6 wins"
                       : gameState.consecutiveWins < 9
-                      ? "8.0x @ 9 wins"
+                      ? "💎 50x @ 9 wins"
                       : gameState.consecutiveWins < 12
-                      ? "15.0x @ 12 wins"
+                      ? "👑 150x @ 12 wins"
                       : gameState.consecutiveWins < 15
-                      ? "30.0x @ 15 wins"
-                      : "Max reached!"}
+                      ? "🔥 500x @ 15 wins"
+                      : "🏆 JACKPOT!"}
                   </span>
                 )}
               </div>
@@ -162,15 +164,15 @@ function App() {
                 const isBonusStep = [3, 6, 9, 12, 15].includes(position);
                 const bonusMultiplier =
                   position === 3
-                    ? 2.0
+                    ? 5.0
                     : position === 6
-                    ? 4.0
-                    : position === 9
-                    ? 8.0
-                    : position === 12
                     ? 15.0
+                    : position === 9
+                    ? 50.0
+                    : position === 12
+                    ? 150.0
                     : position === 15
-                    ? 30.0
+                    ? 500.0
                     : 1.0;
 
                 return (
@@ -474,6 +476,7 @@ function App() {
         isOpen={showShop}
         onClose={() => setShowShop(false)}
         onBuyGoldCoins={handleBuyGoldCoins}
+        onBuySweepCoins={addSweepCoins}
         currentSweepstakeCoins={gameState.sweepstakeCoins}
         currentGoldCoins={gameState.goldCoins}
         hasHistoryExtension={gameState.hasHistoryExtension}
