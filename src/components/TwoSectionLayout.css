@@ -1356,7 +1356,7 @@
   box-shadow: 0 6px 20px rgba(100, 181, 246, 0.5);
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Both Portrait and Landscape */
 @media (max-width: 1023px) {
   .app {
     min-height: 100vh;
@@ -1371,6 +1371,7 @@
     bottom: 0;
     overflow: hidden;
     box-sizing: border-box;
+    flex-direction: column; /* Ensure column layout for mobile */
   }
 
   /* Ensure proper modal z-index stacking */
@@ -1502,6 +1503,123 @@
   .game-title-section {
     margin-bottom: 10px;
     padding-bottom: 8px;
+  }
+}
+
+/* Mobile Portrait Specific Optimizations */
+@media (max-width: 1023px) and (orientation: portrait) {
+  .game-display-section {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .betting-action-section {
+    flex-shrink: 0;
+    height: auto;
+    max-height: none;
+    position: relative;
+    overflow-y: visible;
+  }
+
+  .progress-display {
+    padding: 8px 12px;
+  }
+
+  .footprint-display {
+    max-width: 100%;
+  }
+
+  .footprint-trail {
+    gap: 4px;
+    max-width: 100%;
+  }
+
+  .footprint {
+    width: 24px;
+    height: 24px;
+  }
+
+  .footprint-number {
+    font-size: 8px;
+  }
+
+  .bonus-multiplier {
+    font-size: 7px;
+    padding: 2px 4px;
+    top: -10px;
+    right: -6px;
+  }
+
+  .card-display {
+    padding: 12px;
+    min-height: 140px;
+    max-height: 200px;
+  }
+
+  .history-display {
+    padding: 8px 12px;
+  }
+
+  .history-dot {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .betting-action-section {
+    padding: 12px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .bet-amount-section {
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+
+  .betting-panel {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .bet-btn {
+    height: 44px;
+  }
+
+  .suit-btn {
+    height: 40px;
+    max-width: 60px;
+  }
+
+  .pending-prize-info {
+    font-size: 11px;
+  }
+
+  .bonus-info {
+    font-size: 10px;
+  }
+
+  .footprint-header {
+    padding: 6px 12px;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .cashout-info {
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cashout-button-small {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  .cashout-timer-small {
+    font-size: 10px;
+    padding: 2px 4px;
   }
 }
 

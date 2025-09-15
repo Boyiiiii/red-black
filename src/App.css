@@ -76,10 +76,10 @@
   }
 }
 
-/* Show rotation prompt only on mobile portrait */
+/* Hide rotation prompt - support both orientations */
 @media (max-width: 1023px) and (orientation: portrait) {
   .rotate-prompt-overlay {
-    display: flex;
+    display: none;
   }
 }
 
