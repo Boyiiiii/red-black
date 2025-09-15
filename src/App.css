@@ -68,8 +68,10 @@
 /* Mobile responsive styles */
 @media (max-width: 1023px) {
   .app {
-    min-height: 100svh;
-    height: 100svh;
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height */
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
     overflow: hidden;
   }
 }

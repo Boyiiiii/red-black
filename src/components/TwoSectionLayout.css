@@ -1,7 +1,9 @@
 /* Two-Section Layout - ET Style */
 .app {
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height */
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1357,8 +1359,10 @@
 /* Mobile Responsive */
 @media (max-width: 1023px) {
   .app {
-    min-height: 100svh;
-    height: 100svh;
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height */
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
     width: 100vw;
     position: fixed;
     top: 0;
@@ -1505,7 +1509,8 @@
 @media (max-height: 500px) and (orientation: landscape) and (max-width: 1023px) {
   .app {
     flex-direction: row !important;
-    height: 100svh !important;
+    height: 100vh !important;
+    height: 100dvh !important; /* Dynamic viewport height */
     width: 100vw !important;
     overflow: hidden !important;
     position: fixed !important;
@@ -1520,8 +1525,10 @@
     width: 280px;
     min-width: 280px;
     max-width: 280px;
-    height: 100svh;
-    max-height: 100svh;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
+    max-height: 100vh;
+    max-height: 100dvh; /* Dynamic viewport height */
     border-radius: 0;
     padding: 6px;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
@@ -1551,7 +1558,8 @@
   .game-display-section {
     flex: 1 !important;
     width: calc(100vw - 280px) !important;
-    height: 100svh !important;
+    height: 100vh !important;
+    height: 100dvh !important; /* Dynamic viewport height */
     overflow-y: auto !important;
     display: flex !important;
     flex-direction: column !important;
@@ -2094,9 +2102,21 @@
   }
 }
 
-/* Safe Area Support */
+/* Safe Area Support and Mobile Browser Chrome Handling */
 @supports (padding: max(0px)) {
   @media (max-width: 1023px) {
+    .app {
+      /* Handle notches and safe areas */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      
+      /* Adjust height to account for safe areas */
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+
     .game-display-section {
       padding-left: max(0px, env(safe-area-inset-left));
       padding-right: max(0px, env(safe-area-inset-right));
@@ -2106,6 +2126,25 @@
       padding-left: max(16px, env(safe-area-inset-left));
       padding-right: max(16px, env(safe-area-inset-right));
       padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+  }
+
+  @media (max-height: 500px) and (orientation: landscape) and (max-width: 1023px) {
+    .app {
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+      height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    }
+
+    .betting-action-section {
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+
+    .game-display-section {
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+      height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
     }
   }
 
